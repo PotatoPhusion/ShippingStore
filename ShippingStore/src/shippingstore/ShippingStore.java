@@ -10,7 +10,7 @@ import java.util.*;
  * @author Junye Wen
  */
 public class ShippingStore {
-
+	
     private final List<Package> packageList;
     private final List<User> users;
     private final List<Transaction> transactions;
@@ -22,9 +22,9 @@ public class ShippingStore {
      * tables.
      */
     public ShippingStore() {
-        this.packageList = new ArrayList<Package>();
-        this.users = new ArrayList<User>();
-        this.transactions = new ArrayList<Transaction>();
+    	this.packageList = new ArrayList<Package>();
+    	this.users = new ArrayList<User>();
+    	this.transactions = new ArrayList<Transaction>();
     }
 
     /**

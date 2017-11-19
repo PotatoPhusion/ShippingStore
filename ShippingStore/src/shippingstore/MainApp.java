@@ -1,7 +1,8 @@
 package shippingstore;
 
 import java.util.*;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import gui.StoreInterface;
 
 /**
@@ -9,7 +10,7 @@ import gui.StoreInterface;
 */
 public class MainApp {
     
-    ShippingStore ss;
+    public static ShippingStore ss;
     private final Scanner sc; // Used to read from System's standard input
     
     /**
@@ -555,10 +556,10 @@ public class MainApp {
     private static void createAndShowUI() {
     	StoreInterface gui = new StoreInterface("Shipping Store");
     	
-    	gui.setSize(400, 400);
+    	//gui.setSize(400, 400);
     	
     	gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//gui.pack();
+		gui.pack();
 		gui.setVisible(true);
     }
 
@@ -568,7 +569,7 @@ public class MainApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    	java.awt.EventQueue.invokeLater(new Runnable() {
+    	SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                createAndShowUI();
             }
