@@ -10,6 +10,7 @@ package shippingstore;
  * Employee is a subclass of User
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public class Employee extends User {
     private int socialSecurityNumber;
     private float monthlySalary;

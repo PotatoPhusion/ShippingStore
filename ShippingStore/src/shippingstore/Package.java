@@ -15,6 +15,7 @@ import java.io.Serializable;
  * 
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public abstract class Package implements Serializable {
 
     /**

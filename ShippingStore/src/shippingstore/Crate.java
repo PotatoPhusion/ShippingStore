@@ -10,6 +10,7 @@ package shippingstore;
  * Crate is a subclass of Package
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public class Crate extends Package {
 
     private float loadWeight;

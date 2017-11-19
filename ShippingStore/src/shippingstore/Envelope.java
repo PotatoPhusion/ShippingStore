@@ -10,6 +10,7 @@ package shippingstore;
  * Envelope is a subclass of Package
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public class Envelope extends Package {
 
     private int height;

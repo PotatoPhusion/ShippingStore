@@ -9,6 +9,7 @@ package shippingstore;
  * Custom Exception type, used to report bad input from user.
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public class BadInputException extends Exception {
 
     /**

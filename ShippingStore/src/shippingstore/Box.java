@@ -10,6 +10,7 @@ package shippingstore;
  * Box class is a child class of Package
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public class Box extends Package {
 
     private int dimension;

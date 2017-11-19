@@ -12,6 +12,7 @@ import java.io.Serializable;
  * User is a superclass for all specific types of actors in the system
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public abstract class User implements Serializable {
 
     /**

@@ -19,6 +19,7 @@
 *.cfe
 *.cfs
 *\segments_1
+/bin/
 
 
 # Mobile Tools for Java (J2ME)

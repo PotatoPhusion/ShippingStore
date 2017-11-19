@@ -278,7 +278,6 @@ public class MainApp {
      *
      */
     public void addNewUser() {
-        boolean success;
         // Add fields for new user
         int userType = 0;
         boolean check = false;
@@ -557,7 +556,6 @@ public class MainApp {
      *
      * @param args the command line arguments
      */
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         MainApp app = new MainApp();
         app.runSoftware();

@@ -10,6 +10,7 @@ package shippingstore;
  * Drum is a subclass of Package
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public class Drum extends Package {
 
     private String material;

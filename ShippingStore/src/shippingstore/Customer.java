@@ -11,6 +11,7 @@ package shippingstore;
  *
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public class Customer extends User {
     private String phoneNumber;
     private String address;

@@ -13,6 +13,7 @@ import java.util.Date;
  * This class represents a transaction in the Package Shipping Store Software.
  * @author Junye Wen
  */
+@SuppressWarnings("serial")
 public class Transaction implements Serializable {
     private int customerId;
     private int employeeId;
