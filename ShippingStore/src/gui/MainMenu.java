@@ -36,9 +36,44 @@ public class MainMenu extends JPanel {
 		showTransactionsButton = new JButton("Show All Transactions");
 		exitButton = new JButton("Exit Program");
 		
-		ShowAllListener showAllListener = new ShowAllListener();
-		showPackagesButton.addActionListener(showAllListener);
 		
+		//=========================================
+		// Adding ActionListeners to buttons
+		//=========================================
+		ShowPackagesListener showPackagesListener = new ShowPackagesListener();
+		showPackagesButton.addActionListener(showPackagesListener);
+		
+		AddPackageListener addPackageListener = new AddPackageListener();
+		addPackageButton.addActionListener(addPackageListener);
+		
+		DeletePackageListener deletePackageListener = new DeletePackageListener();
+		deletePackageButton.addActionListener(deletePackageListener);
+		
+		SearchPackageListener searchPackageListener = new SearchPackageListener();
+		searchPackageButton.addActionListener(searchPackageListener);
+		
+		ShowUsersListener showUsersListener = new ShowUsersListener();
+		showUsersButton.addActionListener(showUsersListener);
+		
+		AddUserListener addUserListener = new AddUserListener();
+		addUserButton.addActionListener(addUserListener);
+		
+		UpdateUserListener updateUserListener = new UpdateUserListener();
+		updateUserButton.addActionListener(updateUserListener);
+		
+		DeliverPackageListener deliverPackageListener = new DeliverPackageListener();
+		deliverPackageButton.addActionListener(deliverPackageListener);
+		
+		ShowTransactionsListener showTransactionsListener = new ShowTransactionsListener();
+		showTransactionsButton.addActionListener(showTransactionsListener);
+		
+		ExitListener exitListener = new ExitListener();
+		exitButton.addActionListener(exitListener);
+		
+		
+		//=========================================
+		// Adding buttons to MainMenu
+		//=========================================
 		this.add(showPackagesButton);
 		this.add(addPackageButton);
 		this.add(deletePackageButton);
@@ -51,10 +86,73 @@ public class MainMenu extends JPanel {
 		this.add(exitButton);
 	}
 	
-	private class ShowAllListener implements ActionListener {
+	private class ShowPackagesListener implements ActionListener {
 		
 		public void actionPerformed(ActionEvent event) {
 			showPackagesButton.setText("I changed.");
+		}
+		
+	}
+	private class AddPackageListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			addPackageButton.setText("I changed.");
+		}
+		
+	}
+	private class DeletePackageListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			deletePackageButton.setText("I changed.");
+		}
+		
+	}
+	private class SearchPackageListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			searchPackageButton.setText("I changed.");
+		}
+		
+	}
+	private class ShowUsersListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			showUsersButton.setText("I changed.");
+		}
+		
+	}
+	private class AddUserListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			addUserButton.setText("I changed.");
+		}
+		
+	}
+	private class UpdateUserListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			updateUserButton.setText("I changed.");
+		}
+		
+	}
+	private class DeliverPackageListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			deliverPackageButton.setText("I changed.");
+		}
+		
+	}
+	private class ShowTransactionsListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			showTransactionsButton.setText("I changed.");
+		}
+		
+	}
+	private class ExitListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			exitButton.setText("I changed.");
 		}
 		
 	}

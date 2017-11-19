@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 @SuppressWarnings("serial")
 public class StoreInterface extends JFrame{
 	
-	public static StoreInterface si;
-	
 	public StoreInterface() {
 		super("Shipping Store");
 		displayMainMenu();
@@ -18,7 +16,7 @@ public class StoreInterface extends JFrame{
 		displayMainMenu();
 	}
 	
-	private void displayMainMenu() {
+	public void displayMainMenu() {
 		this.setLayout(new FlowLayout());
 		
 		MainMenu mainMenu = new MainMenu();
@@ -27,6 +25,10 @@ public class StoreInterface extends JFrame{
 		this.add(mainMenu);
 		
 		this.repaint();
+	}
+	
+	public void displayPackageList() {
+		
 	}
 	
 }
