@@ -1,6 +1,8 @@
 package shippingstore;
 
 import java.util.*;
+import javax.swing.*;
+import gui.StoreInterface;
 
 /**
 * Main access point
@@ -550,6 +552,15 @@ public class MainApp {
         System.out.println(ss.getAllTransactionsText());
     }
 
+    private static void createAndShowUI() {
+    	StoreInterface gui = new StoreInterface("Shipping Store");
+    	
+    	gui.setSize(400, 400);
+    	
+    	gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//gui.pack();
+		gui.setVisible(true);
+    }
 
     /**
      * The main method of the program.
@@ -557,6 +568,12 @@ public class MainApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+    	java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+               createAndShowUI();
+            }
+         });
+    	
         MainApp app = new MainApp();
         app.runSoftware();
     }

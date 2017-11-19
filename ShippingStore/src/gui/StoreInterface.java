@@ -5,13 +5,12 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class StoreInterface extends JFrame{
 	
-	StoreInterface() {
+	public StoreInterface() {
 		super("Shipping Store");
 	}
 	
-	StoreInterface(String title) {
+	public StoreInterface(String title) {
 		super(title);
 	}
-	
 	
 }

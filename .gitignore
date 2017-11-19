@@ -18,6 +18,16 @@
 *.si
 *.cfe
 *.cfs
+*.fdt
+*.fdx
+*.fnm
+*.frq
+*.nrm
+*.prx
+*.tii
+*.tis
+*.gen
+*.ser
 *\segments_1
 /bin/
 
