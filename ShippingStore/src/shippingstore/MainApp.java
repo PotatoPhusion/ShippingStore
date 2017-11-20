@@ -901,16 +901,16 @@ public class MainApp {
     				UIManager.getSystemLookAndFeelClassName());
     	} 
     	catch (UnsupportedLookAndFeelException e) {
-    		// TODO: handle exception
+    		e.printStackTrace();
     	}
     	catch (ClassNotFoundException e) {
-    		// TODO: handle exception
+    		e.printStackTrace();
     	}
     	catch (InstantiationException e) {
-    		// TODO: handle exception
+    		e.printStackTrace();
     	}
     	catch (IllegalAccessException e) {
-    		// TODO: handle exception
+    		e.printStackTrace();
     	}
     	
     	//si.setSize(400, 400);
