@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+
 import java.awt.FlowLayout;
 
 @SuppressWarnings("serial")
@@ -19,7 +20,7 @@ public class StoreInterface extends JFrame{
 	public void displayMainMenu() {
 		this.setLayout(new FlowLayout());
 		
-		MainMenu mainMenu = new MainMenu();
+		MainMenu mainMenu = new MainMenu(this);
 		
 		this.getContentPane().removeAll();
 		this.add(mainMenu);

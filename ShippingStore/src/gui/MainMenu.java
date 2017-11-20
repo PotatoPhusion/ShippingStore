@@ -21,10 +21,16 @@ public class MainMenu extends JPanel {
 	JButton showTransactionsButton;
 	JButton exitButton;
 	
+	StoreInterface si;
 	
-	public MainMenu() {
+	public MainMenu(StoreInterface si) {
+		this.si = si;
+		
 		this.setLayout(new GridLayout(5, 2));
 		
+		//=========================================
+		// Instantiate Buttons
+		//=========================================
 		showPackagesButton = new JButton("Show All Packages");
 		addPackageButton = new JButton("Add a New Package");
 		deletePackageButton = new JButton("Remove a Package");

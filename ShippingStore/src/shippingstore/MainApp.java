@@ -554,16 +554,16 @@ public class MainApp {
     }
 
     private static void createAndShowUI() {
-    	StoreInterface gui = new StoreInterface("Shipping Store");
+    	StoreInterface si = new StoreInterface("Shipping Store");
     	
     	//gui.setSize(400, 400);
     	
-    	gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.pack();
-		gui.setVisible(true);
+    	si.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		si.pack();
+		si.setVisible(true);
     }
-
-    /**
+	
+	/**
      * The main method of the program.
      *
      * @param args the command line arguments
@@ -578,4 +578,5 @@ public class MainApp {
         MainApp app = new MainApp();
         app.runSoftware();
     }
+    
 }
