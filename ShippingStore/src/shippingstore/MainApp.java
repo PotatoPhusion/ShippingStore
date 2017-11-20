@@ -1,16 +1,21 @@
 package shippingstore;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.util.*;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import gui.StoreInterface;
+
+import javax.swing.*;
 
 /**
 * Main access point
 */
 public class MainApp {
     
-    public static ShippingStore ss;
+    ShippingStore ss;
+    private static JFrame si;
     private final Scanner sc; // Used to read from System's standard input
     
     /**
@@ -30,7 +35,13 @@ public class MainApp {
        int choice = 0;
        boolean exitProgram = false;
        do {
-           printMenu();
+    	   
+    	   SwingUtilities.invokeLater(new Runnable() {
+    		   public void run() {
+    			   printMenu();
+    		   }
+    	   });
+    	   
            try {
                choice = sc.nextInt();
 
@@ -61,19 +72,142 @@ public class MainApp {
    /**
     * Auxiliary method that prints out the operations menu.
     */
-   private static void printMenu() {
-       System.out.println(
-               "\n 1. Show all existing packages in the database.\n" +
-               " 2. Add a new package to the database. \n" +
-               " 3. Delete a package from a database (given its tracking number).\n" +
-               " 4. Search for a package (given its tracking number).\n" +
-               " 5. Show list of users.\n" +
-               " 6. Add a new user to the database.\n" +
-               " 7. Update user info (given their id).\n" +
-               " 8. Deliver a package.\n" +
-               " 9. Show a list of transactions.\n" +
-               "10. Exit program.\n");
-   }
+    private void printMenu() {
+    	JPanel mainMenu = new JPanel();
+	   	mainMenu.setLayout(new GridLayout(5, 2));
+	   	
+	   	//============================================
+		// Instantiate Buttons and set preferred size
+		//============================================
+		JButton showPackagesButton = new JButton("Show All Packages");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton addPackageButton = new JButton("Add a New Package");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton deletePackageButton = new JButton("Remove a Package");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton searchPackageButton = new JButton("Search for a Package");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton showUsersButton = new JButton("Show All Users");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton addUserButton = new JButton("Add a New User");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton updateUserButton = new JButton("Update a User's Info");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton deliverPackageButton = new JButton("Deliver a Package");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton showTransactionsButton = new JButton("Show All Transactions");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		JButton exitButton = new JButton("Exit Program");
+		showPackagesButton.setPreferredSize(new Dimension(200, 50));
+		
+		
+		//============================================
+		// Adding ActionListeners to buttons
+		//============================================
+		showPackagesButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						showAllPackages();
+					}
+				});
+			}
+		});
+		
+		
+		addPackageButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		deletePackageButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		searchPackageButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		showUsersButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		addUserButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		updateUserButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		deliverPackageButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		showTransactionsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		exitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showAllPackages();	// TODO: Update this
+			}
+		});
+		
+		
+		//============================================
+		// Adding buttons to MainMenu
+		//============================================
+		mainMenu.add(showPackagesButton);
+		mainMenu.add(addPackageButton);
+		mainMenu.add(deletePackageButton);
+		mainMenu.add(searchPackageButton);
+		mainMenu.add(showUsersButton);
+		mainMenu.add(addUserButton);
+		mainMenu.add(updateUserButton);
+		mainMenu.add(deliverPackageButton);
+		mainMenu.add(showTransactionsButton);
+		mainMenu.add(exitButton);
+		
+		si.getContentPane().removeAll();
+		si.add(mainMenu);
+		si.pack();
+		
+		si.repaint();
+	}
+   
    
    /**
      * This method allows the user to enter a new package to the list
@@ -236,7 +370,21 @@ public class MainApp {
      * formatted manner.
      */
     public void showAllPackages() {
-        System.out.println(ss.getAllPackagesFormatted());
+    	JPanel panel = new JPanel();
+    	JTextArea packageList = new JTextArea();
+    	packageList.setEditable(false);
+    	
+    	panel.setLayout(new FlowLayout());
+    	
+        packageList.setText(ss.getAllPackagesFormatted());
+        
+        panel.add(packageList);
+        
+		si.getContentPane().removeAll();
+		si.add(panel);
+		si.pack();
+		
+		si.repaint();
     }
     
     /**
@@ -553,15 +701,36 @@ public class MainApp {
         System.out.println(ss.getAllTransactionsText());
     }
 
+    
     private static void createAndShowUI() {
-    	StoreInterface si = new StoreInterface("Shipping Store");
+    	si = new JFrame("Shipping Store");
+    	si.setLayout(new FlowLayout());
     	
-    	//gui.setSize(400, 400);
+    	try {
+            // Set System Look & Feel
+    		UIManager.setLookAndFeel(
+    				UIManager.getSystemLookAndFeelClassName());
+    	} 
+    	catch (UnsupportedLookAndFeelException e) {
+    		// TODO: handle exception
+    	}
+    	catch (ClassNotFoundException e) {
+    		// TODO: handle exception
+    	}
+    	catch (InstantiationException e) {
+    		// TODO: handle exception
+    	}
+    	catch (IllegalAccessException e) {
+    		// TODO: handle exception
+    	}
+    	
+    	//si.setSize(400, 400);
     	
     	si.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		si.pack();
+		//si.pack();
 		si.setVisible(true);
     }
+    
 	
 	/**
      * The main method of the program.
@@ -570,10 +739,10 @@ public class MainApp {
      */
     public static void main(String[] args) {
     	SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-               createAndShowUI();
-            }
-         });
+    		public void run() {
+    			createAndShowUI();
+    		}
+    	});
     	
         MainApp app = new MainApp();
         app.runSoftware();
