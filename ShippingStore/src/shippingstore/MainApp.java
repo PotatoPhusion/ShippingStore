@@ -19,7 +19,7 @@ import javax.swing.*;
 */
 public class MainApp {
     
-	private final Dimension MENU_BUTTON_SIZE = new Dimension(100, 40);
+	private final Dimension MENU_BUTTON_SIZE = new Dimension(100, 35);
 	
     ShippingStore ss;
     private static JFrame si;
@@ -106,7 +106,7 @@ public class MainApp {
 			public void actionPerformed(ActionEvent event) {
 				try {
 					addNewPackage();	// TODO: Implement
-				} catch (InputMismatchException ex) {
+				} catch (NumberFormatException ex) {
 		            System.err.println("Input missmatch. Please Try again.");	// TODO: Error Logging and JOptionPane error message
 				} catch (BadInputException ex) {
 					System.err.println("Bad input. "+ex.getMessage());	// TODO: Error Logging and JOptionPane error message
@@ -148,7 +148,7 @@ public class MainApp {
 			public void actionPerformed(ActionEvent event) {
 				try {
 					updateUser();	// TODO: Implement
-				} catch (InputMismatchException ex) {
+				} catch (NumberFormatException ex) {
 		            System.err.println("Input missmatch. Please Try again.");	// TODO: Error Logging and JOptionPane error message
 				} catch (BadInputException ex) {
 					System.err.println("Bad input. "+ex.getMessage());	// TODO: Error Logging and JOptionPane error message
@@ -209,34 +209,413 @@ public class MainApp {
 		si.repaint();
 	}
     
-    public void addNewPackage() throws BadInputException {
+
+    public void addNewPackage() throws BadInputException, NumberFormatException {
     	
+    	String[] typeStrings = { "Envelope", "Box", "Crate", "Drum" };
+    	String[] specStrings = { "Fragile", "Books", "Catalogs", "Do-not-bend", "N/A" };
+    	String[] mailClassStrings = { "First-Class", "Priority", "Retail", "Ground", "Metro" };
+    	
+        //=================================
+        // Begin building UI
+        //=================================
+    	JPanel wholePanel = new JPanel();
+    	wholePanel.setLayout(new BoxLayout(wholePanel, BoxLayout.Y_AXIS));
     	JPanel addPackagePanel = new JPanel(new CardLayout());
     	
-    	JPanel cardEnvelope = new JPanel();
+    	JPanel cardEnvelope = new JPanel();											// Contains all stuff to do with envelopes
+    	JPanel envelopeInputPanel = new JPanel();									// Contains all of the input fields
+    	JPanel envelopeButtonPanel = new JPanel(new FlowLayout());					// Contains the Add and Cancel Buttons
+    	envelopeInputPanel.setLayout(new GridLayout(5, 2));							// Fields go in 5 row 2 column grid [Label: Field]
+    	cardEnvelope.setLayout(new BoxLayout(cardEnvelope, BoxLayout.Y_AXIS));		// Internal panels stacked on top of each other
     	JPanel cardBox = new JPanel();
+    	cardBox.setLayout(new GridLayout(5, 2));
     	JPanel cardCrate = new JPanel();
+    	cardCrate.setLayout(new GridLayout(5, 2));
     	JPanel cardDrum = new JPanel();
+    	cardDrum.setLayout(new GridLayout(5, 2));
     	
     	class TypeLayoutListener implements ItemListener {
     		public void itemStateChanged(ItemEvent event) {
     			CardLayout cl = (CardLayout)(addPackagePanel.getLayout());
     			cl.show(addPackagePanel, (String)event.getItem());
+    			si.repaint();
     		}
     	}
     	
     	JPanel comboBoxPane = new JPanel();
-    	
-    	String[] typeStrings = { "Envelope", "Box", "Crate", "Drum" };
+    	comboBoxPane.setLayout(new BoxLayout(comboBoxPane, BoxLayout.Y_AXIS));
         
         JComboBox<String> typeList = new JComboBox<String>(typeStrings);
         typeList.setSelectedIndex(0);
         typeList.setEditable(false);
         TypeLayoutListener cardListener = new TypeLayoutListener();
         typeList.addItemListener(cardListener);
+        comboBoxPane.add(new JLabel("Type: "));
         comboBoxPane.add(typeList);
         
+        //=================================
+        // Add and Cancel Buttons
+        //=================================
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+    	JButton addButton1 = new JButton("Add Package");
+    	JButton cancelButton1 = new JButton("Cancel");
+    	JButton addButton2 = new JButton("Add Package");
+    	JButton cancelButton2 = new JButton("Cancel");
+    	JButton addButton3 = new JButton("Add Package");
+    	JButton cancelButton3 = new JButton("Cancel");
+    	JButton addButton4 = new JButton("Add Package");
+    	JButton cancelButton4 = new JButton("Cancel");
+    	
+    	addButton1.setPreferredSize(new Dimension(150, 30));
+    	cancelButton1.setPreferredSize(new Dimension(150, 30));
+    	addButton1.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	cancelButton1.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	
+    	addButton2.setPreferredSize(new Dimension(150, 30));
+    	cancelButton3.setPreferredSize(new Dimension(150, 30));
+    	addButton2.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	cancelButton3.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	
+    	addButton3.setPreferredSize(new Dimension(150, 30));
+    	cancelButton3.setPreferredSize(new Dimension(150, 30));
+    	addButton3.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	cancelButton3.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	
+    	addButton4.setPreferredSize(new Dimension(150, 30));
+    	cancelButton4.setPreferredSize(new Dimension(150, 30));
+    	addButton4.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	cancelButton4.setAlignmentX(Component.CENTER_ALIGNMENT);
+    	
+    	class CancelListener implements ActionListener {
+    		public void actionPerformed(ActionEvent event) {
+    			printMenu();
+    		}
+    	}
+    	
+    	CancelListener cancelListen = new CancelListener();
+    	cancelButton1.addActionListener(cancelListen);
+    	cancelButton2.addActionListener(cancelListen);
+    	cancelButton3.addActionListener(cancelListen);
+    	cancelButton4.addActionListener(cancelListen);
+        
         // TODO: Literally everything else to do with adding a package.
+        
+        //=================================
+        // Tracking Number
+        //=================================
+        cardEnvelope.add(new JLabel("Tracking Number: "));
+        cardBox.add(new JLabel("Tracking Number: "));
+        cardCrate.add(new JLabel("Tracking Number: "));
+        cardDrum.add(new JLabel("Tracking Number: "));
+        
+        JTextField trackingField1 = new JTextField(20);
+        JTextField trackingField2 = new JTextField(20);
+        JTextField trackingField3 = new JTextField(20);
+        JTextField trackingField4 = new JTextField(20);
+        
+        cardEnvelope.add(trackingField1);
+        cardBox.add(trackingField2);
+        cardCrate.add(trackingField3);
+        cardDrum.add(trackingField4);
+        
+        //=================================
+        // Specification
+        //=================================
+        cardEnvelope.add(new JLabel("Specification: "));
+        cardBox.add(new JLabel("Specification: "));
+        cardCrate.add(new JLabel("Specification: "));
+        cardDrum.add(new JLabel("Specification: "));
+        
+        JComboBox<String> specBox1 = new JComboBox<String>(specStrings);
+        JComboBox<String> specBox2 = new JComboBox<String>(specStrings);
+        JComboBox<String> specBox3 = new JComboBox<String>(specStrings);
+        JComboBox<String> specBox4 = new JComboBox<String>(specStrings);
+        
+        cardEnvelope.add(specBox1);
+        cardBox.add(specBox2);
+        cardCrate.add(specBox3);
+        cardDrum.add(specBox4);
+        
+        //=================================
+        // Mailing Class
+        //=================================
+        cardEnvelope.add(new JLabel("Mailing Class: "));
+        cardBox.add(new JLabel("Mailing Class: "));
+        cardCrate.add(new JLabel("Mailing Class: "));
+        cardDrum.add(new JLabel("Mailing Class: "));
+        
+        JComboBox<String> mcBox1 = new JComboBox<String>(mailClassStrings);
+        JComboBox<String> mcBox2 = new JComboBox<String>(mailClassStrings);
+        JComboBox<String> mcBox3 = new JComboBox<String>(mailClassStrings);
+        JComboBox<String> mcBox4 = new JComboBox<String>(mailClassStrings);
+        
+        cardEnvelope.add(mcBox1);
+        cardBox.add(mcBox2);
+        cardCrate.add(mcBox3);
+        cardDrum.add(mcBox4);
+        
+        //=================================
+        // Envelope Details
+        //=================================
+        JTextField heightField = new JTextField(6);
+        JTextField widthField = new JTextField(6);
+        
+        cardEnvelope.add(new JLabel("Height: "));
+        cardEnvelope.add(heightField);
+        cardEnvelope.add(new JLabel("Width: "));
+        cardEnvelope.add(widthField);
+        
+        class EnvelopeListener implements ActionListener {
+        	
+        	private String ptn;
+        	private String specification;
+        	private String mailingClass;
+        	private int height;
+        	private int width;
+        	
+        	public void actionPerformed(ActionEvent event) {
+        		ptn = trackingField1.getText();
+        		JOptionPane.showMessageDialog(si, ptn);
+        		
+        		if (ptn.length() != 5) {
+        			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
+        			return;
+        		}
+        		else if (ss.packageExists(ptn)) {
+        			JOptionPane.showMessageDialog(si, "Tracking Number already in database");	// TODO: Logging
+        			return;
+        		}
+        		
+        		try {
+        			height = Integer.parseInt(heightField.getText());
+        			
+        			if (height < 0) {
+        				JOptionPane.showMessageDialog(si, "Height must be positive!");	// TODO: Logging
+        				return;
+        			}
+        		} catch (NumberFormatException ex) {
+        			JOptionPane.showMessageDialog(si, "Height must be an integer!");	// TODO: Logging
+        			return;
+        		}
+        		
+        		try {
+        			width = Integer.parseInt(widthField.getText());
+        			
+        			if (width < 0) {
+        				JOptionPane.showMessageDialog(si, "Width must be positive!");	// TODO: Logging
+        				return;
+        			}
+        		} catch (NumberFormatException ex) {
+        			JOptionPane.showMessageDialog(si, "Width must be an integer!");	// TODO: Logging
+        			return;
+        		}
+        		
+        		specification = (String)specBox1.getSelectedItem();
+        		mailingClass = (String)mcBox1.getSelectedItem();
+        		
+        		ss.addEnvelope(ptn, specification, mailingClass, height, width);
+        		
+        		JOptionPane.showMessageDialog(si, "Package successfully added!");	// TODO: Logging
+        		printMenu();
+        	}
+        }
+        
+        //=================================
+        // Box Details
+        //=================================
+        JTextField dimensionField = new JTextField(6);
+        JTextField volumeField = new JTextField(6);
+        
+        cardBox.add(new JLabel("Largest Dimension: "));
+        cardBox.add(dimensionField);
+        cardBox.add(new JLabel("Volume: "));
+        cardBox.add(volumeField);
+        
+        class BoxListener implements ActionListener {
+        	
+        	private String ptn;
+        	private String specification;
+        	private String mailingClass;
+        	private int largestDim;
+        	private int volume;
+        	
+        	public void actionPerformed(ActionEvent event) {
+        		ptn = trackingField2.getText();
+        		System.out.println(ptn);
+        		
+        		if (ptn.length() != 5) {
+        			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
+        			return;
+        		}
+        		else if (ss.packageExists(ptn)) {
+        			JOptionPane.showMessageDialog(si, "Tracking Number already in database");	// TODO: Logging
+        			return;
+        		}
+        		
+        		try {
+        			largestDim = Integer.parseInt(dimensionField.getText());
+        			
+        			if (largestDim < 0) {
+        				JOptionPane.showMessageDialog(si, "Largest Dimension must be positive!");	// TODO: Logging
+        				return;
+        			}
+        		} catch (NumberFormatException ex) {
+        			JOptionPane.showMessageDialog(si, "Largest Dimension must be an integer!");	// TODO: Logging
+        			return;
+        		}
+        		
+        		try {
+        			volume = Integer.parseInt(volumeField.getText());
+        			
+        			if (volume < 0) {
+        				JOptionPane.showMessageDialog(si, "Volume must be positive!");	// TODO: Logging
+        				return;
+        			}
+        		} catch (NumberFormatException ex) {
+        			JOptionPane.showMessageDialog(si, "Volume must be an integer!");	// TODO: Logging
+        			return;
+        		}
+        		
+        		specification = (String)specBox1.getSelectedItem();
+        		mailingClass = (String)mcBox1.getSelectedItem();
+        		
+        		ss.addBox(ptn, specification, mailingClass, largestDim, volume);
+        		
+        		JOptionPane.showMessageDialog(si, "Package successfully added!");	// TODO: Logging
+        		printMenu();
+        	}
+        }
+        
+        //=================================
+        // Crate Details
+        //=================================
+        JTextField loadField = new JTextField(6);
+        JTextField contentField = new JTextField(6);
+        
+        cardCrate.add(new JLabel("Max Load Weight: "));
+        cardCrate.add(loadField);
+        cardCrate.add(new JLabel("Content: "));
+        cardCrate.add(contentField);
+        
+        class CrateListener implements ActionListener {
+        	
+        	private String ptn;
+        	private String specification;
+        	private String mailingClass;
+        	private float loadWeight;
+        	private String content;
+        	
+        	public void actionPerformed(ActionEvent event) {
+        		ptn = trackingField3.getText();
+        		
+        		if (ptn.length() != 5) {
+        			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
+        			return;
+        		}
+        		else if (ss.packageExists(ptn)) {
+        			JOptionPane.showMessageDialog(si, "Tracking Number already in database");	// TODO: Logging
+        			return;
+        		}
+        		
+        		try {
+        			loadWeight = Float.parseFloat(loadField.getText());
+        			
+        			if (loadWeight < 0) {
+        				JOptionPane.showMessageDialog(si, "Load Weight must be positive!");	// TODO: Logging
+        				return;
+        			}
+        		} catch (NumberFormatException ex) {
+        			JOptionPane.showMessageDialog(si, "Load Weight must be a decimal number!");	// TODO: Logging
+        			return;
+        		}
+        		
+        		specification = (String)specBox1.getSelectedItem();
+        		mailingClass = (String)mcBox1.getSelectedItem();
+        		content = contentField.getText();
+        		
+        		ss.addCrate(ptn, specification, mailingClass, loadWeight, content);
+        		
+        		JOptionPane.showMessageDialog(si, "Package successfully added!");	// TODO: Logging
+        		printMenu();
+        	}
+        }
+        
+        //=================================
+        // Drum Details
+        //=================================        
+        JTextField materialField = new JTextField(6);
+        JTextField diameterField = new JTextField(6);
+        
+        cardDrum.add(new JLabel("Drum Material: "));
+        cardDrum.add(materialField);
+        cardDrum.add(new JLabel("Diameter: "));
+        cardDrum.add(diameterField);
+        
+        class DrumListener implements ActionListener {
+        	
+        	private String ptn;
+        	private String specification;
+        	private String mailingClass;
+        	private String material;
+        	private float diameter;
+        	
+        	public void actionPerformed(ActionEvent event) {
+        		ptn = trackingField4.getText();
+        		
+        		if (ptn.length() != 5) {
+        			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
+        			return;
+        		}
+        		else if (ss.packageExists(ptn)) {
+        			JOptionPane.showMessageDialog(si, "Tracking Number already in database");	// TODO: Logging
+        			return;
+        		}
+        		
+        		try {
+        			diameter = Float.parseFloat(volumeField.getText());
+        			
+        			if (diameter < 0) {
+        				JOptionPane.showMessageDialog(si, "Diameter must be positive!");	// TODO: Logging
+        				return;
+        			}
+        		} catch (NumberFormatException ex) {
+        			JOptionPane.showMessageDialog(si, "Diameter must be a decimal number");	// TODO: Logging
+        			return;
+        		}
+        		
+        		material = materialField.getText();
+        		specification = (String)specBox1.getSelectedItem();
+        		mailingClass = (String)mcBox1.getSelectedItem();
+        		
+        		ss.addDrum(ptn, specification, mailingClass, material, diameter);
+        		
+        		JOptionPane.showMessageDialog(si, "Package successfully added!");	// TODO: Logging
+        		printMenu();
+        	}
+        }
+        
+        //=================================
+        // Frame Setup
+        //=================================
+        cardEnvelope.add(addButton1);
+    	cardEnvelope.add(cancelButton1);
+    	cardBox.add(addButton2);
+    	cardBox.add(cancelButton2);
+    	cardCrate.add(addButton3);
+    	cardCrate.add(cancelButton3);
+    	cardDrum.add(addButton4);
+    	cardDrum.add(cancelButton4);
+        
+        EnvelopeListener envListen = new EnvelopeListener();
+        BoxListener boxListen = new BoxListener();
+        CrateListener crateListen = new CrateListener();
+        DrumListener drumListen = new DrumListener();
+        
+        addButton1.addActionListener(envListen);
+        addButton2.addActionListener(boxListen);
+        addButton3.addActionListener(crateListen);
+        addButton4.addActionListener(drumListen);
         
         addPackagePanel.add(cardEnvelope, "Envelope");
         addPackagePanel.add(cardBox, "Box");
@@ -244,12 +623,14 @@ public class MainApp {
         addPackagePanel.add(cardDrum, "Drum");
         
         si.getContentPane().removeAll();
-		si.add(comboBoxPane, BorderLayout.PAGE_START);
-		si.add(addPackagePanel, BorderLayout.CENTER);
+		wholePanel.add(comboBoxPane, BorderLayout.PAGE_START);
+		wholePanel.add(addPackagePanel, BorderLayout.PAGE_END);
+		si.add(wholePanel);
 		si.pack();
 		
 		si.repaint();
     }
+
    
    /**
      * This method allows the user to enter a new package to the list
@@ -492,13 +873,14 @@ public class MainApp {
     	
     	JPanel inputPanel = new JPanel(new FlowLayout());
     	JTextField trackingNumberField = new JTextField(20);
+    	JLabel label = new JLabel("Enter Tracking Number:");
     	
     	class RemoveListener implements ActionListener {
     		public void actionPerformed(ActionEvent event) {
     			if (ss.deletePackage(trackingNumberField.getText())) 
-    				JOptionPane.showMessageDialog(null, "Package deleted.");
+    				JOptionPane.showMessageDialog(si, "Package deleted.");
     			else 
-    				JOptionPane.showMessageDialog(null, "Package with given tracking number not found in the database.");
+    				JOptionPane.showMessageDialog(si, "Package with given tracking number not found in the database.");
     			printMenu();
     		}
     	}
@@ -522,6 +904,7 @@ public class MainApp {
         	}
         });
     	
+    	inputPanel.add(label);
     	inputPanel.add(trackingNumberField);
     	
     	buttonPanel.add(cancelButton);
