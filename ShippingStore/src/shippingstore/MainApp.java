@@ -372,13 +372,23 @@ public class MainApp {
     public void showAllPackages() {
     	JPanel panel = new JPanel();
     	JTextArea packageList = new JTextArea();
-    	packageList.setEditable(false);
+    	JButton menuButton = new JButton("Main Menu");
     	
-    	panel.setLayout(new FlowLayout());
+    	packageList.setEditable(false);
+    	menuButton.setPreferredSize(new Dimension(100, 50));
+    	
+    	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     	
         packageList.setText(ss.getAllPackagesFormatted());
         
         panel.add(packageList);
+        panel.add(menuButton);
+        
+        menuButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent event) {
+        		printMenu();
+        	}
+        });
         
 		si.getContentPane().removeAll();
 		si.add(panel);
