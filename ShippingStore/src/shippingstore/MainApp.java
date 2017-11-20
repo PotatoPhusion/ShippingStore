@@ -2,6 +2,7 @@ package shippingstore;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -18,6 +19,8 @@ import javax.swing.*;
 */
 public class MainApp {
     
+	private final Dimension MENU_BUTTON_SIZE = new Dimension(100, 40);
+	
     ShippingStore ss;
     private static JFrame si;
     private final Scanner sc; // Used to read from System's standard input
@@ -455,7 +458,8 @@ public class MainApp {
     	JButton menuButton = new JButton("Main Menu");
     	
     	packageList.setEditable(false);
-    	menuButton.setPreferredSize(new Dimension(100, 50));
+    	menuButton.setPreferredSize(MENU_BUTTON_SIZE);
+    	menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     	
     	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     	
@@ -482,14 +486,55 @@ public class MainApp {
      * database.
      */
     public void deletePackage() {
-        sc.nextLine();
-        System.out.print("\nEnter tracking number of pacakge to delete (string): ");
-        String ptn = sc.nextLine();
-
-        if (ss.deletePackage(ptn)) 
-            System.out.println("Package deleted.");
-        else 
-            System.out.println("Package with given tracking number not found in the database.");
+    	
+    	JPanel removePackagePanel = new JPanel();
+    	removePackagePanel.setLayout(new BoxLayout(removePackagePanel, BoxLayout.Y_AXIS));
+    	
+    	JPanel inputPanel = new JPanel(new FlowLayout());
+    	JTextField trackingNumberField = new JTextField(20);
+    	
+    	class RemoveListener implements ActionListener {
+    		public void actionPerformed(ActionEvent event) {
+    			if (ss.deletePackage(trackingNumberField.getText())) 
+    				JOptionPane.showMessageDialog(null, "Package deleted.");
+    			else 
+    				JOptionPane.showMessageDialog(null, "Package with given tracking number not found in the database.");
+    			printMenu();
+    		}
+    	}
+    	
+    	RemoveListener removeListener = new RemoveListener();
+    	
+    	trackingNumberField.addActionListener(removeListener);
+    	
+    	JPanel buttonPanel = new JPanel(new FlowLayout());
+    	JButton cancelButton = new JButton("Cancel");
+    	JButton removeButton = new JButton("Remove");
+    	
+    	cancelButton.setPreferredSize(MENU_BUTTON_SIZE);
+    	removeButton.setPreferredSize(MENU_BUTTON_SIZE);
+    	
+    	removeButton.addActionListener(removeListener);
+    	
+    	cancelButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent event) {
+        		printMenu();
+        	}
+        });
+    	
+    	inputPanel.add(trackingNumberField);
+    	
+    	buttonPanel.add(cancelButton);
+    	buttonPanel.add(removeButton);
+    	
+    	removePackagePanel.add(inputPanel, BorderLayout.NORTH);
+    	removePackagePanel.add(buttonPanel, BorderLayout.SOUTH);
+    	
+    	si.getContentPane().removeAll();
+    	si.add(removePackagePanel);
+    	si.pack();
+    	
+    	si.repaint();
     }
     
     /**
@@ -516,7 +561,8 @@ public class MainApp {
     	JButton menuButton = new JButton("Main Menu");
     	
     	packageList.setEditable(false);
-    	menuButton.setPreferredSize(new Dimension(100, 50));
+    	menuButton.setPreferredSize(MENU_BUTTON_SIZE);
+    	menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     	
     	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     	
@@ -817,11 +863,15 @@ public class MainApp {
     	JButton menuButton = new JButton("Main Menu");
     	
     	packageList.setEditable(false);
-    	menuButton.setPreferredSize(new Dimension(100, 50));
+    	menuButton.setPreferredSize(MENU_BUTTON_SIZE);
+    	menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     	
     	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     	
-        packageList.setText(ss.getAllTransactionsText());
+    	if (ss.getAllTransactionsText() == "") {
+    		packageList.setText("No recent transactions...");
+    	}
+    	
         
         panel.add(packageList);
         panel.add(menuButton);
@@ -843,6 +893,7 @@ public class MainApp {
     private static void createAndShowUI() {
     	si = new JFrame("Shipping Store");
     	si.setLayout(new FlowLayout());
+    	si.setMinimumSize(new Dimension(300, 100));
     	
     	try {
             // Set System Look & Feel
