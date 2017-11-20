@@ -3,6 +3,9 @@ package shippingstore;
 import java.io.*;
 import java.util.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * This class represents a car dealership software, providing some basic
  * operations.
@@ -15,8 +18,18 @@ public class ShippingStore {
     private final List<User> users;
     private final List<Transaction> transactions;
 
+    //new
+    private final static  Logger logger = Logger.getLogger(ShippingStore.class.getName());
+    
+    //just an example, not meant for real but not writing to file REEEE 
+    public static void test(){
+    	logger.log(Level.WARNING,"test something to log");
+    }
+    
     private int userIdCounter = 1;
 
+    
+    
     /**
      * Default constructor. Initializes the inventory, users, and transactions
      * tables.
@@ -25,6 +38,7 @@ public class ShippingStore {
     	this.packageList = new ArrayList<Package>();
     	this.users = new ArrayList<User>();
     	this.transactions = new ArrayList<Transaction>();
+    	
     }
 
     /**
