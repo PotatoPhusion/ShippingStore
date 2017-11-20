@@ -1,9 +1,13 @@
 package shippingstore;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
@@ -32,41 +36,12 @@ public class MainApp {
     * asking the user to select one.
     */
    public void runSoftware() {
-       int choice = 0;
-       boolean exitProgram = false;
-       do {
-    	   
-    	   SwingUtilities.invokeLater(new Runnable() {
-    		   public void run() {
-    			   printMenu();
-    		   }
-    	   });
-    	   
-           try {
-               choice = sc.nextInt();
 
-               switch (choice) {
-                   case 1: showAllPackages(); break;
-                   case 2: addNewPackage(); break;
-                   case 3: deletePackage(); break;
-                   case 4: searchPackage(); break;
-                   case 5: showAllUsers(); break;
-                   case 6: addNewUser(); break;
-                   case 7: updateUser(); break;
-                   case 8: deliverPackage(); break;
-                   case 9: showAllTransactions(); break;
-                   case 10: ss.writeDatabase(); exitProgram = true; break;
-                   default: System.err.println("Please select a number between 1 and 10.");
-               }
-           } catch (InputMismatchException ex) {
-               System.err.println("Input missmatch. Please Try again.");
-               continue;
-           } catch (BadInputException ex) {
-               System.err.println("Bad input. "+ex.getMessage());
-               System.err.println("Please try again.");
-               continue;
-           }
-       } while (!exitProgram);
+	   SwingUtilities.invokeLater(new Runnable() {
+		   public void run() {
+			   printMenu();
+		   }
+	   });
    }
 
    /**
@@ -106,7 +81,7 @@ public class MainApp {
 		JButton showTransactionsButton = new JButton("Show All Transactions");
 		showPackagesButton.setPreferredSize(new Dimension(200, 50));
 		
-		JButton exitButton = new JButton("Exit Program");
+		JButton exitButton = new JButton("Save and Quit");
 		showPackagesButton.setPreferredSize(new Dimension(200, 50));
 		
 		
@@ -126,63 +101,86 @@ public class MainApp {
 		
 		addPackageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				try {
+					addNewPackage();	// TODO: Implement
+				} catch (InputMismatchException ex) {
+		            System.err.println("Input missmatch. Please Try again.");	// TODO: Error Logging and JOptionPane error message
+				} catch (BadInputException ex) {
+					System.err.println("Bad input. "+ex.getMessage());	// TODO: Error Logging and JOptionPane error message
+					System.err.println("Please try again.");
+				}
 			}
 		});
 		
 		
 		deletePackageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				deletePackage();	// TODO: Implement
 			}
 		});
 		
 		
 		searchPackageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				searchPackage();	// TODO: Implement
 			}
 		});
 		
 		
 		showUsersButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				showAllUsers();
 			}
 		});
 		
 		
 		addUserButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				addNewUser();	// TODO: Implement
 			}
 		});
 		
 		
 		updateUserButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				try {
+					updateUser();	// TODO: Implement
+				} catch (InputMismatchException ex) {
+		            System.err.println("Input missmatch. Please Try again.");	// TODO: Error Logging and JOptionPane error message
+				} catch (BadInputException ex) {
+					System.err.println("Bad input. "+ex.getMessage());	// TODO: Error Logging and JOptionPane error message
+					System.err.println("Please try again.");
+				}
 			}
 		});
 		
 		
 		deliverPackageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				try {
+					deliverPackage();	// TODO: Implement
+				} catch (InputMismatchException ex) {
+		            System.err.println("Input missmatch. Please Try again.");	// TODO: Error Logging and JOptionPane error message
+				} catch (BadInputException ex) {
+					System.err.println("Bad input. "+ex.getMessage());	// TODO: Error Logging and JOptionPane error message
+					System.err.println("Please try again.");
+				}
 			}
 		});
 		
 		
 		showTransactionsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				showAllTransactions();
 			}
 		});
 		
 		
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showAllPackages();	// TODO: Update this
+				ss.writeDatabase();
+				
+				si.dispose();
 			}
 		});
 		
@@ -207,24 +205,88 @@ public class MainApp {
 		
 		si.repaint();
 	}
-   
+    
+    public void addNewPackage() throws BadInputException {
+    	
+    	JPanel addPackagePanel = new JPanel(new CardLayout());
+    	
+    	JPanel cardEnvelope = new JPanel();
+    	JPanel cardBox = new JPanel();
+    	JPanel cardCrate = new JPanel();
+    	JPanel cardDrum = new JPanel();
+    	
+    	class TypeLayoutListener implements ItemListener {
+    		public void itemStateChanged(ItemEvent event) {
+    			CardLayout cl = (CardLayout)(addPackagePanel.getLayout());
+    			cl.show(addPackagePanel, (String)event.getItem());
+    		}
+    	}
+    	
+    	JPanel comboBoxPane = new JPanel();
+    	
+    	String[] typeStrings = { "Envelope", "Box", "Crate", "Drum" };
+        
+        JComboBox<String> typeList = new JComboBox<String>(typeStrings);
+        typeList.setSelectedIndex(0);
+        typeList.setEditable(false);
+        TypeLayoutListener cardListener = new TypeLayoutListener();
+        typeList.addItemListener(cardListener);
+        comboBoxPane.add(typeList);
+        
+        // TODO: Literally everything else to do with adding a package.
+        
+        addPackagePanel.add(cardEnvelope, "Envelope");
+        addPackagePanel.add(cardBox, "Box");
+        addPackagePanel.add(cardCrate, "Crate");
+        addPackagePanel.add(cardDrum, "Drum");
+        
+        si.getContentPane().removeAll();
+		si.add(comboBoxPane, BorderLayout.PAGE_START);
+		si.add(addPackagePanel, BorderLayout.CENTER);
+		si.pack();
+		
+		si.repaint();
+    }
    
    /**
      * This method allows the user to enter a new package to the list
      * database.
      * @throws shippingstore.BadInputException bad input
      */
+    /*
     public void addNewPackage() throws BadInputException {
-        System.out.println("Select package type:\n"
-                + "1. Envelope\n"
-                + "2. Box\n"
-                + "3. Crate\n"
-                + "4. Drum");
-        int packageType = sc.nextInt();
-        if (packageType < 1 || packageType > 4) {
-            throw new BadInputException("Legal package type values: 1-4.");
-        }
-        sc.nextLine();
+    	
+    	int packageType = 1;	// TODO: don't forget to delet this
+    	
+    	JPanel addPackagePanel = new JPanel(new CardLayout());
+    	
+    	JPanel cardEnvelope = new JPanel();
+    	JPanel cardBox = new JPanel();
+    	JPanel cardCrate = new JPanel();
+    	JPanel cardDrum = new JPanel();
+    	
+    	class TypeLayoutListener implements ItemListener {
+    		public void itemStateChanged(ItemEvent event) {
+    			CardLayout cl = (CardLayout)(addPackagePanel.getLayout());
+    			cl.show(addPackagePanel, (String)event.getItem());
+    		}
+    	}
+    	
+    	JPanel comboBoxPane = new JPanel();
+    	
+    	String[] typeStrings = { "Envelope", "Box", "Crate", "Drum" };
+        
+        JComboBox<String> typeList = new JComboBox<String>(typeStrings);
+        typeList.setSelectedIndex(0);
+        typeList.setEditable(false);
+        TypeLayoutListener cardListener = new TypeLayoutListener();
+        typeList.addItemListener(cardListener);
+        
+        
+        JLabel trackingNumLabel = new JLabel("Tracking Number: ");
+        JTextField trackNum = new JTextField(20);
+        
+        trackingNumLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         System.out.println("\nEnter tracking number (string): ");
         String ptn = sc.nextLine();
@@ -236,7 +298,13 @@ public class MainApp {
             System.out.println("\nPackage with the same tracking number exists, try again");
             return;
         }
-
+        
+        String[] specificationStrings = { "Fragile", "Books", "Catalogs", "Do-not-bend", "N/A" };
+        
+        JComboBox<String> specificationList = new JComboBox<String>(specificationStrings);
+        typeList.setSelectedIndex(0);
+        typeList.setEditable(false);
+        
         System.out.println("\nEnter Specification: Fragile, Books, Catalogs, Do-not-bend, or N/A");
         String specification = sc.nextLine();
         boolean correct = false;
@@ -363,10 +431,22 @@ public class MainApp {
         } else {
             System.out.println("Unknown package type entered. Please try again.");
         }
+        
+        addPackagePanel.add(cardEnvelope, "Envelope");
+        addPackagePanel.add(cardBox, "Box");
+        addPackagePanel.add(cardCrate, "Crate");
+        addPackagePanel.add(cardDrum, "Drum");
+        
+        si.getContentPane().removeAll();
+		si.add(addPackagePanel);
+		si.pack();
+		
+		si.repaint();
     }
+    */
     
     /**
-     * This method prints out all the package currently in the inventory, in a
+     * This method displays all the package currently in the inventory, in a
      * formatted manner.
      */
     public void showAllPackages() {
@@ -431,7 +511,31 @@ public class MainApp {
      * Prints out a list of all users in the database.
      */
     public void showAllUsers() {
-        System.out.println(ss.getAllUsersFormatted());
+    	JPanel panel = new JPanel();
+    	JTextArea packageList = new JTextArea();
+    	JButton menuButton = new JButton("Main Menu");
+    	
+    	packageList.setEditable(false);
+    	menuButton.setPreferredSize(new Dimension(100, 50));
+    	
+    	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    	
+        packageList.setText(ss.getAllUsersFormatted());
+        
+        panel.add(packageList);
+        panel.add(menuButton);
+        
+        menuButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent event) {
+        		printMenu();
+        	}
+        });
+        
+		si.getContentPane().removeAll();
+		si.add(panel);
+		si.pack();
+		
+		si.repaint();
     }
     
     /**
@@ -708,7 +812,31 @@ public class MainApp {
      * Prints out a list of all recorded transactions.
      */
     public void showAllTransactions() {
-        System.out.println(ss.getAllTransactionsText());
+    	JPanel panel = new JPanel();
+    	JTextArea packageList = new JTextArea();
+    	JButton menuButton = new JButton("Main Menu");
+    	
+    	packageList.setEditable(false);
+    	menuButton.setPreferredSize(new Dimension(100, 50));
+    	
+    	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    	
+        packageList.setText(ss.getAllTransactionsText());
+        
+        panel.add(packageList);
+        panel.add(menuButton);
+        
+        menuButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent event) {
+        		printMenu();
+        	}
+        });
+        
+		si.getContentPane().removeAll();
+		si.add(panel);
+		si.pack();
+		
+		si.repaint();
     }
 
     
