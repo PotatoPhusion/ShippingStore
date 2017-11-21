@@ -118,7 +118,7 @@ public class MainApp {
 		
 		deletePackageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				deletePackage();	// TODO: Implement
+				deletePackage();
 			}
 		});
 		
@@ -146,14 +146,7 @@ public class MainApp {
 		
 		updateUserButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				try {
-					updateUser();	// TODO: Implement
-				} catch (NumberFormatException ex) {
-		            System.err.println("Input missmatch. Please Try again.");	// TODO: Error Logging and JOptionPane error message
-				} catch (BadInputException ex) {
-					System.err.println("Bad input. "+ex.getMessage());	// TODO: Error Logging and JOptionPane error message
-					System.err.println("Please try again.");
-				}
+				updateUser();
 			}
 		});
 		
@@ -947,14 +940,56 @@ public class MainApp {
      * and then it prints details about the package.
      */
     public void searchPackage() {
-        sc.nextLine();
-        System.out.print("\nEnter tracking number of package to search for (string): ");
-        String ptn = sc.nextLine();
-
-        if (ss.packageExists(ptn))
-            System.out.println(ss.getPackageFormatted(ptn));
-        else
-            System.out.println("Package with PTN " + ptn + " not found in the database");
+    	JPanel removePackagePanel = new JPanel();
+    	removePackagePanel.setLayout(new BoxLayout(removePackagePanel, BoxLayout.Y_AXIS));
+    	
+    	JPanel inputPanel = new JPanel(new FlowLayout());
+    	JTextField trackingNumberField = new JTextField(20);
+    	JLabel label = new JLabel("Enter Tracking Number:");
+    	
+    	class SearchListener implements ActionListener {
+    		public void actionPerformed(ActionEvent event) {
+    			if (ss.packageExists(trackingNumberField.getText())) 
+    				JOptionPane.showMessageDialog(si, "Package found.");
+    			else 
+    				JOptionPane.showMessageDialog(si, "Package with given tracking number not found in the database.");
+    			printMenu();
+    		}
+    	}
+    	
+    	SearchListener searchListener = new SearchListener();
+    	
+    	trackingNumberField.addActionListener(searchListener);
+    	
+    	JPanel buttonPanel = new JPanel(new FlowLayout());
+    	JButton cancelButton = new JButton("Cancel");
+    	JButton searchButton = new JButton("Search");
+    	
+    	cancelButton.setPreferredSize(MENU_BUTTON_SIZE);
+    	searchButton.setPreferredSize(MENU_BUTTON_SIZE);
+    	
+    	searchButton.addActionListener(searchListener);
+    	
+    	cancelButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent event) {
+        		printMenu();
+        	}
+        });
+    	
+    	inputPanel.add(label);
+    	inputPanel.add(trackingNumberField);
+    	
+    	buttonPanel.add(cancelButton);
+    	buttonPanel.add(searchButton);
+    	
+    	removePackagePanel.add(inputPanel, BorderLayout.NORTH);
+    	removePackagePanel.add(buttonPanel, BorderLayout.SOUTH);
+    	
+    	si.getContentPane().removeAll();
+    	si.add(removePackagePanel);
+    	si.pack();
+    	
+    	si.repaint();
     }
     
     /**
@@ -1029,12 +1064,12 @@ public class MainApp {
     	//===========================================
     	// Build frame
     	//===========================================
-    	si.removeAll();
+    	si.getContentPane().removeAll();
     	
     	customerPanel.add(customerButtonPanel);
     	
     	si.add(customerPanel);
-    	
+    	si.pack();
     	si.repaint();
     }
     
@@ -1152,13 +1187,124 @@ public class MainApp {
 
     }
     
+    public void updateUser() {
+    	JPanel idPanel = new JPanel();
+    	JLabel enterIdLabel = new JLabel("Enter user ID: ");
+    	JTextField idField = new JTextField(20);
+    	
+    	JButton cancelButton = new JButton("Cancel");
+    	JButton updateButton = new JButton("Update User");
+    	
+    	cancelButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+    			printMenu();
+    		}
+    	});
+    	
+    	class IdListener implements ActionListener {
+	    	int userId;
+	    	
+	    	public void actionPerformed(ActionEvent event) {
+		    	try {
+		    		userId = Integer.parseInt(idField.getText());
+		    		
+		    		if (!ss.userExists(userId)) {
+		    			JOptionPane.showMessageDialog(si, "No user found with ID: " + userId);	// TODO: Logging
+		    			return;
+		    		}
+		    		
+		    		if (ss.isCustomer(userId)) {
+		    			updateCustomer();
+		    		}
+		    		else {
+		    			//updateEmployee();
+		    		}
+		    	} catch (NumberFormatException ex) {
+		    		JOptionPane.showMessageDialog(si, "Please enter a proper user ID");	// TODO: Logging
+		    		return;
+		    	}
+	    	}
+    	}
+    	
+    	IdListener idListen = new IdListener();
+    	updateButton.addActionListener(idListen);
+    	
+    	idPanel.add(enterIdLabel);
+    	idPanel.add(idField);
+    	idPanel.add(cancelButton);
+    	idPanel.add(updateButton);
+    	
+    	si.getContentPane().removeAll();
+    	
+    	si.add(idPanel);
+    	si.pack();
+    	si.repaint();
+    }
+    
+    public void updateCustomer() {
+    	JPanel mainPane = new JPanel();
+    	mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+    	
+    	JPanel inputFields = new JPanel();
+    	inputFields.setLayout(new GridLayout(0, 2));
+    	
+    	JPanel buttonPanel = new JPanel();
+    	JButton cancelButton = new JButton("Cancel");
+    	JButton updateButton = new JButton("Update");
+    	
+    	JLabel firstNameLabel = new JLabel("First Name: ");
+    	JLabel lastNameLabel = new JLabel("Last Name: ");
+    	JLabel phoneLabel = new JLabel("Phone Number: ");
+    	JLabel addressLabel = new JLabel("Address: ");
+    	
+    	JTextField firstNameField = new JTextField(20);
+    	JTextField lastNameField = new JTextField(20);
+    	JTextField phoneField = new JTextField(20);
+    	JTextField addressField = new JTextField(20);
+    	
+    	cancelButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+    			printMenu();
+    		}
+    	});
+    	
+    	class updateButtonListener implements ActionListener {
+    		
+    		
+    		public void actionPerformed(ActionEvent event) {
+    			
+    		}
+    	}
+    	
+    	buttonPanel.add(cancelButton);
+    	buttonPanel.add(updateButton);
+    	
+    	inputFields.add(firstNameLabel);
+    	inputFields.add(firstNameField);
+    	inputFields.add(lastNameLabel);
+    	inputFields.add(lastNameField);
+    	inputFields.add(phoneLabel);
+    	inputFields.add(phoneField);
+    	inputFields.add(addressLabel);
+    	inputFields.add(addressField);
+    	
+    	mainPane.add(inputFields);
+    	mainPane.add(buttonPanel);
+    	
+    	si.getContentPane().removeAll();
+    	
+    	si.add(mainPane);
+    	si.pack();
+    	si.repaint();
+    }
+    
     /**
      * This method can be used to update a user's information, given their user
      * ID.
      *
      * @throws shippingstore.BadInputException
      */
-    public void updateUser() throws BadInputException {
+    public void odlupdateUser() throws BadInputException {
         boolean check = false;
         System.out.print("\nEnter user ID: ");
         int userID = sc.nextInt();
