@@ -228,23 +228,38 @@ public class MainApp {
     	JPanel envelopeButtonPanel = new JPanel(new FlowLayout());					// Contains the Add and Cancel Buttons
     	envelopeInputPanel.setLayout(new GridLayout(5, 2));							// Fields go in 5 row 2 column grid [Label: Field]
     	cardEnvelope.setLayout(new BoxLayout(cardEnvelope, BoxLayout.Y_AXIS));		// Internal panels stacked on top of each other
+    	cardEnvelope.setName("Envelope");
+    	
     	JPanel cardBox = new JPanel();
-    	cardBox.setLayout(new GridLayout(5, 2));
+    	JPanel boxInputPanel = new JPanel();
+    	JPanel boxButtonPanel = new JPanel(new FlowLayout());
+    	boxInputPanel.setLayout(new GridLayout(5, 2));
+    	cardBox.setLayout(new BoxLayout(cardBox, BoxLayout.Y_AXIS));
+    	cardBox.setName("Box");
+    	
     	JPanel cardCrate = new JPanel();
-    	cardCrate.setLayout(new GridLayout(5, 2));
+    	JPanel crateInputPanel = new JPanel();
+    	JPanel crateButtonPanel = new JPanel();
+    	crateInputPanel.setLayout(new GridLayout(5, 2));
+    	cardCrate.setLayout(new BoxLayout(cardCrate, BoxLayout.Y_AXIS));
+    	cardCrate.setName("Crate");
+    	
     	JPanel cardDrum = new JPanel();
-    	cardDrum.setLayout(new GridLayout(5, 2));
+    	JPanel drumInputPanel = new JPanel();
+    	JPanel drumButtonPanel = new JPanel(new FlowLayout());
+    	drumInputPanel.setLayout(new GridLayout(5, 2));
+    	cardDrum.setLayout(new BoxLayout(cardDrum, BoxLayout.Y_AXIS));
+    	cardDrum.setName("Drum");
     	
     	class TypeLayoutListener implements ItemListener {
     		public void itemStateChanged(ItemEvent event) {
     			CardLayout cl = (CardLayout)(addPackagePanel.getLayout());
     			cl.show(addPackagePanel, (String)event.getItem());
-    			si.repaint();
+    			//si.repaint();
     		}
     	}
     	
-    	JPanel comboBoxPane = new JPanel();
-    	comboBoxPane.setLayout(new BoxLayout(comboBoxPane, BoxLayout.Y_AXIS));
+    	JPanel comboBoxPane = new JPanel(new FlowLayout());
         
         JComboBox<String> typeList = new JComboBox<String>(typeStrings);
         typeList.setSelectedIndex(0);
@@ -304,56 +319,56 @@ public class MainApp {
         //=================================
         // Tracking Number
         //=================================
-        cardEnvelope.add(new JLabel("Tracking Number: "));
-        cardBox.add(new JLabel("Tracking Number: "));
-        cardCrate.add(new JLabel("Tracking Number: "));
-        cardDrum.add(new JLabel("Tracking Number: "));
+        envelopeInputPanel.add(new JLabel("Tracking Number: "));
+        boxInputPanel.add(new JLabel("Tracking Number: "));
+        crateInputPanel.add(new JLabel("Tracking Number: "));
+        drumInputPanel.add(new JLabel("Tracking Number: "));
         
         JTextField trackingField1 = new JTextField(20);
         JTextField trackingField2 = new JTextField(20);
         JTextField trackingField3 = new JTextField(20);
         JTextField trackingField4 = new JTextField(20);
         
-        cardEnvelope.add(trackingField1);
-        cardBox.add(trackingField2);
-        cardCrate.add(trackingField3);
-        cardDrum.add(trackingField4);
+        envelopeInputPanel.add(trackingField1);
+        boxInputPanel.add(trackingField2);
+        crateInputPanel.add(trackingField3);
+        drumInputPanel.add(trackingField4);
         
         //=================================
         // Specification
         //=================================
-        cardEnvelope.add(new JLabel("Specification: "));
-        cardBox.add(new JLabel("Specification: "));
-        cardCrate.add(new JLabel("Specification: "));
-        cardDrum.add(new JLabel("Specification: "));
+        envelopeInputPanel.add(new JLabel("Specification: "));
+        boxInputPanel.add(new JLabel("Specification: "));
+        crateInputPanel.add(new JLabel("Specification: "));
+        drumInputPanel.add(new JLabel("Specification: "));
         
         JComboBox<String> specBox1 = new JComboBox<String>(specStrings);
         JComboBox<String> specBox2 = new JComboBox<String>(specStrings);
         JComboBox<String> specBox3 = new JComboBox<String>(specStrings);
         JComboBox<String> specBox4 = new JComboBox<String>(specStrings);
         
-        cardEnvelope.add(specBox1);
-        cardBox.add(specBox2);
-        cardCrate.add(specBox3);
-        cardDrum.add(specBox4);
+        envelopeInputPanel.add(specBox1);
+        boxInputPanel.add(specBox2);
+        crateInputPanel.add(specBox3);
+        drumInputPanel.add(specBox4);
         
         //=================================
         // Mailing Class
         //=================================
-        cardEnvelope.add(new JLabel("Mailing Class: "));
-        cardBox.add(new JLabel("Mailing Class: "));
-        cardCrate.add(new JLabel("Mailing Class: "));
-        cardDrum.add(new JLabel("Mailing Class: "));
+        envelopeInputPanel.add(new JLabel("Mailing Class: "));
+        boxInputPanel.add(new JLabel("Mailing Class: "));
+        crateInputPanel.add(new JLabel("Mailing Class: "));
+        drumInputPanel.add(new JLabel("Mailing Class: "));
         
         JComboBox<String> mcBox1 = new JComboBox<String>(mailClassStrings);
         JComboBox<String> mcBox2 = new JComboBox<String>(mailClassStrings);
         JComboBox<String> mcBox3 = new JComboBox<String>(mailClassStrings);
         JComboBox<String> mcBox4 = new JComboBox<String>(mailClassStrings);
         
-        cardEnvelope.add(mcBox1);
-        cardBox.add(mcBox2);
-        cardCrate.add(mcBox3);
-        cardDrum.add(mcBox4);
+        envelopeInputPanel.add(mcBox1);
+        boxInputPanel.add(mcBox2);
+        crateInputPanel.add(mcBox3);
+        drumInputPanel.add(mcBox4);
         
         //=================================
         // Envelope Details
@@ -361,10 +376,10 @@ public class MainApp {
         JTextField heightField = new JTextField(6);
         JTextField widthField = new JTextField(6);
         
-        cardEnvelope.add(new JLabel("Height: "));
-        cardEnvelope.add(heightField);
-        cardEnvelope.add(new JLabel("Width: "));
-        cardEnvelope.add(widthField);
+        envelopeInputPanel.add(new JLabel("Height: "));
+        envelopeInputPanel.add(heightField);
+        envelopeInputPanel.add(new JLabel("Width: "));
+        envelopeInputPanel.add(widthField);
         
         class EnvelopeListener implements ActionListener {
         	
@@ -376,7 +391,6 @@ public class MainApp {
         	
         	public void actionPerformed(ActionEvent event) {
         		ptn = trackingField1.getText();
-        		JOptionPane.showMessageDialog(si, ptn);
         		
         		if (ptn.length() != 5) {
         			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
@@ -427,10 +441,10 @@ public class MainApp {
         JTextField dimensionField = new JTextField(6);
         JTextField volumeField = new JTextField(6);
         
-        cardBox.add(new JLabel("Largest Dimension: "));
-        cardBox.add(dimensionField);
-        cardBox.add(new JLabel("Volume: "));
-        cardBox.add(volumeField);
+        boxInputPanel.add(new JLabel("Largest Dimension: "));
+        boxInputPanel.add(dimensionField);
+        boxInputPanel.add(new JLabel("Volume: "));
+        boxInputPanel.add(volumeField);
         
         class BoxListener implements ActionListener {
         	
@@ -442,7 +456,6 @@ public class MainApp {
         	
         	public void actionPerformed(ActionEvent event) {
         		ptn = trackingField2.getText();
-        		System.out.println(ptn);
         		
         		if (ptn.length() != 5) {
         			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
@@ -493,10 +506,10 @@ public class MainApp {
         JTextField loadField = new JTextField(6);
         JTextField contentField = new JTextField(6);
         
-        cardCrate.add(new JLabel("Max Load Weight: "));
-        cardCrate.add(loadField);
-        cardCrate.add(new JLabel("Content: "));
-        cardCrate.add(contentField);
+        crateInputPanel.add(new JLabel("Max Load Weight: "));
+        crateInputPanel.add(loadField);
+        crateInputPanel.add(new JLabel("Content: "));
+        crateInputPanel.add(contentField);
         
         class CrateListener implements ActionListener {
         	
@@ -547,10 +560,10 @@ public class MainApp {
         JTextField materialField = new JTextField(6);
         JTextField diameterField = new JTextField(6);
         
-        cardDrum.add(new JLabel("Drum Material: "));
-        cardDrum.add(materialField);
-        cardDrum.add(new JLabel("Diameter: "));
-        cardDrum.add(diameterField);
+        drumInputPanel.add(new JLabel("Drum Material: "));
+        drumInputPanel.add(materialField);
+        drumInputPanel.add(new JLabel("Diameter: "));
+        drumInputPanel.add(diameterField);
         
         class DrumListener implements ActionListener {
         	
@@ -598,14 +611,14 @@ public class MainApp {
         //=================================
         // Frame Setup
         //=================================
-        cardEnvelope.add(addButton1);
-    	cardEnvelope.add(cancelButton1);
-    	cardBox.add(addButton2);
-    	cardBox.add(cancelButton2);
-    	cardCrate.add(addButton3);
-    	cardCrate.add(cancelButton3);
-    	cardDrum.add(addButton4);
-    	cardDrum.add(cancelButton4);
+        envelopeButtonPanel.add(addButton1);
+    	envelopeButtonPanel.add(cancelButton1);
+    	boxButtonPanel.add(addButton2);
+    	boxButtonPanel.add(cancelButton2);
+    	crateButtonPanel.add(addButton3);
+    	crateButtonPanel.add(cancelButton3);
+    	drumButtonPanel.add(addButton4);
+    	drumButtonPanel.add(cancelButton4);
         
         EnvelopeListener envListen = new EnvelopeListener();
         BoxListener boxListen = new BoxListener();
@@ -616,6 +629,15 @@ public class MainApp {
         addButton2.addActionListener(boxListen);
         addButton3.addActionListener(crateListen);
         addButton4.addActionListener(drumListen);
+        
+        cardEnvelope.add(envelopeInputPanel);
+        cardEnvelope.add(envelopeButtonPanel);
+        cardBox.add(boxInputPanel);
+        cardBox.add(boxButtonPanel);
+        cardCrate.add(crateInputPanel);
+        cardCrate.add(crateButtonPanel);
+        cardDrum.add(boxInputPanel);
+        cardDrum.add(boxButtonPanel);
         
         addPackagePanel.add(cardEnvelope, "Envelope");
         addPackagePanel.add(cardBox, "Box");
@@ -967,11 +989,60 @@ public class MainApp {
 		si.repaint();
     }
     
+    public void addNewUser() {
+    	
+    	String[] userTypes = { "Customer", "Employee" };
+    	
+    	//===========================================
+    	// Setting up the panels
+    	//===========================================
+    	JPanel masterPanel = new JPanel();
+    	masterPanel.setLayout(new BoxLayout(masterPanel, BoxLayout.Y_AXIS));
+    	
+    	JPanel cardLayoutPanel = new JPanel(new CardLayout());
+    	JPanel comboBoxPanel = new JPanel();
+    	JPanel customerPanel = new JPanel();
+    	customerPanel.setLayout(new BoxLayout(customerPanel, BoxLayout.Y_AXIS));
+    	JPanel customerInputPanel = new JPanel(new GridLayout(0, 2));
+    	JPanel customerButtonPanel = new JPanel();
+    	
+    	JPanel employeePanel = new JPanel();
+    	employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));
+    	JPanel employeeInputPanel = new JPanel(new GridLayout(0, 2));
+    	JPanel employeeButtonPanel = new JPanel();
+    	
+    	//===========================================
+    	// Buttons
+    	//===========================================
+    	JButton addButton1 = new JButton("Add User");
+    	JButton cancelButton1 = new JButton("Cancel");
+    	JButton addButton2 = new JButton("Add User");
+    	JButton cancelButton2 = new JButton("Cancel");
+    	
+    	customerButtonPanel.add(cancelButton1);
+    	customerButtonPanel.add(addButton1);
+    	employeeButtonPanel.add(cancelButton2);
+    	employeeButtonPanel.add(addButton2);
+    	
+    	
+    	
+    	//===========================================
+    	// Build frame
+    	//===========================================
+    	si.removeAll();
+    	
+    	customerPanel.add(customerButtonPanel);
+    	
+    	si.add(customerPanel);
+    	
+    	si.repaint();
+    }
+    
     /**
      * This method allows a new user to be added to the database.
      *
      */
-    public void addNewUser() {
+    public void oldaddNewUser() {
         // Add fields for new user
         int userType = 0;
         boolean check = false;
