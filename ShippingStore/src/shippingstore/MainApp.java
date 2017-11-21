@@ -9,10 +9,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
 import javax.swing.*;
+
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 /**
 * Main access point
@@ -153,14 +156,7 @@ public class MainApp {
 		
 		deliverPackageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				try {
-					deliverPackage();	// TODO: Implement
-				} catch (InputMismatchException ex) {
-		            System.err.println("Input missmatch. Please Try again.");	// TODO: Error Logging and JOptionPane error message
-				} catch (BadInputException ex) {
-					System.err.println("Bad input. "+ex.getMessage());	// TODO: Error Logging and JOptionPane error message
-					System.err.println("Please try again.");
-				}
+				deliverPackage();
 			}
 		});
 		
@@ -1024,168 +1020,238 @@ public class MainApp {
 		si.repaint();
     }
     
+    /**
+     * This method allows a new user to be added to the database.
+     *
+     */
     public void addNewUser() {
     	
-    	String[] userTypes = { "Customer", "Employee" };
+    	JPanel addUserPanel = new JPanel();
     	
-    	//===========================================
-    	// Setting up the panels
-    	//===========================================
-    	JPanel masterPanel = new JPanel();
-    	masterPanel.setLayout(new BoxLayout(masterPanel, BoxLayout.Y_AXIS));
+    	JRadioButton employeeButton = new JRadioButton("Employee");
+    	employeeButton.setMnemonic(KeyEvent.VK_E);
+    	employeeButton.setActionCommand("Employee");
     	
-    	JPanel cardLayoutPanel = new JPanel(new CardLayout());
-    	JPanel comboBoxPanel = new JPanel();
-    	JPanel customerPanel = new JPanel();
-    	customerPanel.setLayout(new BoxLayout(customerPanel, BoxLayout.Y_AXIS));
-    	JPanel customerInputPanel = new JPanel(new GridLayout(0, 2));
-    	JPanel customerButtonPanel = new JPanel();
+    	JRadioButton customerButton = new JRadioButton("Customer");
+    	customerButton.setMnemonic(KeyEvent.VK_C);
+    	customerButton.setActionCommand("Customer");
     	
-    	JPanel employeePanel = new JPanel();
-    	employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));
-    	JPanel employeeInputPanel = new JPanel(new GridLayout(0, 2));
-    	JPanel employeeButtonPanel = new JPanel();
+    	ButtonGroup group = new ButtonGroup();
+    	group.add(employeeButton);
+    	group.add(customerButton);
     	
-    	//===========================================
-    	// Buttons
-    	//===========================================
-    	JButton addButton1 = new JButton("Add User");
-    	JButton cancelButton1 = new JButton("Cancel");
-    	JButton addButton2 = new JButton("Add User");
-    	JButton cancelButton2 = new JButton("Cancel");
-    	
-    	customerButtonPanel.add(cancelButton1);
-    	customerButtonPanel.add(addButton1);
-    	employeeButtonPanel.add(cancelButton2);
-    	employeeButtonPanel.add(addButton2);
+    	JButton confirmButton = new JButton("Create User");
     	
     	
+    	class RadioListener implements ActionListener {
+    		public void actionPerformed(ActionEvent event) {
+    			if (group.getSelection().getActionCommand().equals("Employee")) {
+    				addNewEmployee();
+    			}
+    			else {
+    				addNewCustomer();
+    			}
+    		}
+    	}
+    	
+    	RadioListener confirm = new RadioListener();
+    	confirmButton.addActionListener(confirm);
+    	
+    	addUserPanel.add(employeeButton);
+    	addUserPanel.add(customerButton);
+    	addUserPanel.add(confirmButton);
     	
     	//===========================================
     	// Build frame
     	//===========================================
     	si.getContentPane().removeAll();
     	
-    	customerPanel.add(customerButtonPanel);
-    	
-    	si.add(customerPanel);
+    	si.add(addUserPanel);
     	si.pack();
     	si.repaint();
     }
     
-    /**
-     * This method allows a new user to be added to the database.
-     *
-     */
-    public void oldaddNewUser() {
-        // Add fields for new user
-        int userType = 0;
-        boolean check = false;
-
-        while (!check) {
-            System.out.println("Select user type:\n"
-                    + "1. Customer\n"
-                    + "2. Employee");
-
-            if (sc.hasNextInt()) {
-                userType = sc.nextInt();
-
-                if (userType < 1 || userType > 2) {
-                    System.out.println("Wrong integer value: choose 1 or 2");
-                } else {
-                    check = true;
-                }
-            } else {
-                System.out.println("Please select 1 or 2");
-            }
-        }
-
-        sc.nextLine();
-        System.out.println("\nEnter first name (string): ");
-        String firstName = sc.nextLine();
-
-        System.out.println("\nEnter last name (string): ");
-        String lastName = sc.nextLine();
-
-        if (userType == 1) {
-            System.out.println("\nEnter phone number (string): ");
-            String phoneNumber = sc.nextLine();
-
-            System.out.println("\nEnter address (string): ");
-            String address = sc.nextLine();
-
-            ss.addCustomer(firstName, lastName, phoneNumber, address);
-
-        } else if (userType == 2) {
-
-            check = false;
-            float monthlySalary = 0.0f;
-
-            while (!check) {
-
-                System.out.println("\nEnter monthly salary (float): ");
-
-                if (sc.hasNextFloat()) {
-                    monthlySalary = sc.nextFloat();
-                    if (monthlySalary < 0.0f) {
-                        System.out.println("Monthly salary cannot be negative.");
-                    } else {
-                        check = true;
-                    }
-                    sc.nextLine();
-
-                } else {
-                    System.out.println("Please enter monthly salary as a non-zero float value.");
-                    sc.nextLine();
-                }
-            }
-
-            int ssn = 0;
-            check = false;
-            while (!check) {
-
-                System.out.println("\nEnter SSN (9-digital int): ");
-                if (sc.hasNextInt()) {
-                    ssn = sc.nextInt();
-                    if (String.valueOf(ssn).length() != 9) {
-                        System.out.println("\nThat is not a nine digit number");
-                    } else if (ssn < 10000000 || ssn > 999999999) {
-                        System.out.println("\nGive a correct 9 digit integer");
-                    } else {
-                        check = true;
-                    }
-                    sc.nextLine();
-                } else {
-                    System.out.println("\nNot a number!");
-                    sc.nextLine();
-                } //end if
-            }// end while
-
-            check = false;
-            int bankAccNumber = 0;
-            while (!check) {
-                System.out.println("\nEnter bank account number (int): ");
-                if (sc.hasNextInt()) {
-                    bankAccNumber = sc.nextInt();
-                    if (bankAccNumber < 0) {
-                        System.out.println("\nBank account cannot be negative");
-                    } else {
-                        check = true;
-                    }
-                    sc.nextLine();
-                } else {
-                    System.out.println("Invalid bank Account format, please try again");
-                    sc.nextLine();
-                }
-
-            }//end while
-
-            ss.addEmployee(firstName, lastName, ssn, monthlySalary, bankAccNumber);
-        } else {
-            System.out.println("Unknown user type. Please try again.");
-        }
-
+    private void addNewEmployee() {
+    	JPanel mainPane = new JPanel();
+    	mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+    	
+    	JPanel inputFields = new JPanel();
+    	inputFields.setLayout(new GridLayout(0, 2));
+    	
+    	JPanel buttonPanel = new JPanel();
+    	JButton cancelButton = new JButton("Cancel");
+    	JButton updateButton = new JButton("Create User");
+    	
+    	JLabel firstNameLabel = new JLabel("First Name: ");
+    	JLabel lastNameLabel = new JLabel("Last Name: ");
+    	JLabel ssnLabel = new JLabel("Phone Number: ");
+    	JLabel salaryLabel = new JLabel("Address: ");
+    	JLabel bankNumberLabel = new JLabel("Bank Account Number: ");
+    	
+    	JTextField firstNameField = new JTextField(20);
+    	JTextField lastNameField = new JTextField(20);
+    	JTextField ssnField = new JTextField(20);
+    	JTextField salaryField = new JTextField(20);
+    	JTextField bankNumberField = new JTextField(20);
+    	
+    	cancelButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+    			printMenu();
+    		}
+    	});
+    	
+    	class UpdateButtonListener implements ActionListener {
+    		private String firstName;
+    		private String lastName;
+    		private int ssn;
+    		private float salary;
+    		private int bankNumber;
+    		
+    		public void actionPerformed(ActionEvent event) {
+    			firstName = firstNameField.getText();
+    			lastName = lastNameField.getText();
+    			
+    			try {
+    				ssn = Integer.parseInt(ssnField.getText());
+    				
+    				if (ssn < 100000000 || ssn > 999999999) {
+    					JOptionPane.showMessageDialog(si, "Thst is not a 9-digit number!");
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter the number without dashes");	// TODO: Logging
+    				return;
+    			}
+    			
+    			try {
+    				salary = Float.parseFloat(ssnField.getText());
+    				
+    				if (salary <= 0f) {
+    					JOptionPane.showMessageDialog(si, "Salary must be greater than 0!");	// TODO: Logging
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter monthly salary as a non-zero decimal number.");	// TODO: Logging
+    				return;
+    			}
+    			
+    			try {
+    				bankNumber = Integer.parseInt(ssnField.getText());
+    				
+    				if (bankNumber < 0) {
+    					JOptionPane.showMessageDialog(si, "Bank account number must be greater than 0!");	// TODO: Logging
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");	// TODO: Logging
+    				return;
+    			}
+    			
+    			ss.addEmployee(firstName, lastName, ssn, salary, bankNumber);
+    			JOptionPane.showMessageDialog(si, "New user successfully added!");	// TODO: Log this
+    			printMenu();
+    		}
+    	}
+    	
+    	UpdateButtonListener updateListen = new UpdateButtonListener();
+    	updateButton.addActionListener(updateListen);
+    	
+    	buttonPanel.add(cancelButton);
+    	buttonPanel.add(updateButton);
+    	
+    	inputFields.add(firstNameLabel);
+    	inputFields.add(firstNameField);
+    	inputFields.add(lastNameLabel);
+    	inputFields.add(lastNameField);
+    	inputFields.add(ssnLabel);
+    	inputFields.add(ssnField);
+    	inputFields.add(salaryLabel);
+    	inputFields.add(salaryField);
+    	inputFields.add(bankNumberLabel);
+    	inputFields.add(bankNumberField);
+    	
+    	mainPane.add(inputFields);
+    	mainPane.add(buttonPanel);
+    	
+    	si.getContentPane().removeAll();
+    	
+    	si.add(mainPane);
+    	si.pack();
+    	si.repaint();
     }
+    
+   	private void addNewCustomer() {
+    	JPanel mainPane = new JPanel();
+    	mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+    	
+    	JPanel inputFields = new JPanel();
+    	inputFields.setLayout(new GridLayout(0, 2));
+    	
+    	JPanel buttonPanel = new JPanel();
+    	JButton cancelButton = new JButton("Cancel");
+    	JButton updateButton = new JButton("Create User");
+    	
+    	JLabel firstNameLabel = new JLabel("First Name: ");
+    	JLabel lastNameLabel = new JLabel("Last Name: ");
+    	JLabel phoneLabel = new JLabel("Phone Number: ");
+    	JLabel addressLabel = new JLabel("Address: ");
+    	
+    	JTextField firstNameField = new JTextField(20);
+    	JTextField lastNameField = new JTextField(20);
+    	JTextField phoneField = new JTextField(20);
+    	JTextField addressField = new JTextField(20);
+    	
+    	cancelButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+    			printMenu();
+    		}
+    	});
+    	
+    	class UpdateButtonListener implements ActionListener {
+    		private String firstName;
+    		private String lastName;
+    		private String phoneNumber;
+    		private String address;
+    		
+    		public void actionPerformed(ActionEvent event) {
+    			firstName = firstNameField.getText();
+    			lastName = lastNameField.getText();
+    			phoneNumber = phoneField.getText();
+    			address = addressField.getText();
+    			
+    			ss.addCustomer(firstName, lastName, phoneNumber, address);
+    			JOptionPane.showMessageDialog(si, "New user successfully added!");	//TODO: Log this
+    			printMenu();
+    		}
+    	}
+    	
+    	UpdateButtonListener updateListen = new UpdateButtonListener();
+    	updateButton.addActionListener(updateListen);
+    	
+    	buttonPanel.add(cancelButton);
+    	buttonPanel.add(updateButton);
+    	
+    	inputFields.add(firstNameLabel);
+    	inputFields.add(firstNameField);
+    	inputFields.add(lastNameLabel);
+    	inputFields.add(lastNameField);
+    	inputFields.add(phoneLabel);
+    	inputFields.add(phoneField);
+    	inputFields.add(addressLabel);
+    	inputFields.add(addressField);
+    	
+    	mainPane.add(inputFields);
+    	mainPane.add(buttonPanel);
+    	
+    	si.getContentPane().removeAll();
+    	
+    	si.add(mainPane);
+    	si.pack();
+    	si.repaint();
+    }
+    
+    
+
     
     public void updateUser() {
     	JPanel idPanel = new JPanel();
@@ -1214,10 +1280,10 @@ public class MainApp {
 		    		}
 		    		
 		    		if (ss.isCustomer(userId)) {
-		    			updateCustomer();
+		    			updateCustomer(userId);
 		    		}
 		    		else {
-		    			//updateEmployee();
+		    			updateEmployee(userId);
 		    		}
 		    	} catch (NumberFormatException ex) {
 		    		JOptionPane.showMessageDialog(si, "Please enter a proper user ID");	// TODO: Logging
@@ -1241,7 +1307,7 @@ public class MainApp {
     	si.repaint();
     }
     
-    public void updateCustomer() {
+    public void updateCustomer(int userId) {
     	JPanel mainPane = new JPanel();
     	mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
     	
@@ -1268,13 +1334,31 @@ public class MainApp {
     		}
     	});
     	
-    	class updateButtonListener implements ActionListener {
+    	class UpdateButtonListener implements ActionListener {
+    		private int userID;
+    		private String firstName;
+    		private String lastName;
+    		private String phoneNumber;
+    		private String address;
     		
+    		UpdateButtonListener(int userId) {
+    			this.userID = userId;
+    		}
     		
     		public void actionPerformed(ActionEvent event) {
+    			firstName = firstNameField.getText();
+    			lastName = lastNameField.getText();
+    			phoneNumber = phoneField.getText();
+    			address = addressField.getText();
     			
+    			ss.updateCustomer(userID, firstName, lastName, phoneNumber, address);
+    			JOptionPane.showMessageDialog(si, "User information updated.");	// TODO: Log this
+    			printMenu();
     		}
     	}
+    	
+    	UpdateButtonListener updateListen = new UpdateButtonListener(userId);
+    	updateButton.addActionListener(updateListen);
     	
     	buttonPanel.add(cancelButton);
     	buttonPanel.add(updateButton);
@@ -1298,159 +1382,244 @@ public class MainApp {
     	si.repaint();
     }
     
-    /**
-     * This method can be used to update a user's information, given their user
-     * ID.
-     *
-     * @throws shippingstore.BadInputException
-     */
-    public void odlupdateUser() throws BadInputException {
-        boolean check = false;
-        System.out.print("\nEnter user ID: ");
-        int userID = sc.nextInt();
-
-        if (!ss.userExists(userID)) {
-            System.out.println("User not found.");
-            return;
-        }
-
-        sc.nextLine();
-        System.out.print("\nEnter first name (string): ");
-        String firstName = sc.nextLine();
-
-        System.out.print("\nEnter last name (string): ");
-        String lastName = sc.nextLine();
-
-        if (ss.isCustomer(userID)) {
-            System.out.print("\nEnter phone number (string): ");
-            String phoneNumber = sc.nextLine();
-            System.out.print("\nEnter address (string): ");
-            String address = sc.nextLine();
-            
-            ss.updateCustomer(userID, firstName, lastName, phoneNumber, address);
-
-        } else { //User is an employee
-
-            float monthlySalary = 0.0f;
-            check = false;
-            while (!check) {
-
-                System.out.println("\nEnter monthly salary (float): ");
-
-                if (sc.hasNextFloat()) {
-                    monthlySalary = sc.nextFloat();
-                    if (monthlySalary < 0.0f) {
-                        new BadInputException("Monthly salary cannot be negative.");
-                    } else {
-                        check = true;
-                    }
-                    sc.nextLine();
-                } else {
-                    System.out.println("Please enter monthly salary as a non-zero float value.");
-                    sc.nextLine();
-                }
-            }
-
-            int ssn = 0;
-            check = false;
-            while (!check) {
-
-                System.out.println("\nEnter SSN (9-digital int): ");
-                if (sc.hasNextInt()) {
-                    ssn = sc.nextInt();
-                    if (String.valueOf(ssn).length() != 9) {
-                        new BadInputException("\nThat is not a nine digit number");
-                    } else if (ssn < 10000000 || ssn > 999999999) {
-                        new BadInputException("\nGive a correct 9 digit integer");
-
-                    } else {
-                        check = true;
-                    }
-                } //end if
-                sc.nextLine();
-
-            }// end while
-
-            int bankAccNumber = 0;
-            check = false;
-            while (!check) {
-                System.out.println("\nEnter bank account number (int): ");
-
-                if (sc.hasNextInt()) {
-                    bankAccNumber = sc.nextInt();
-                    if (bankAccNumber < 0) {
-                        new BadInputException("Bank account cannot be negative");
-                    } else {
-                        check = true;
-                    }
-                    sc.nextLine();
-                } else {
-                    System.out.println("Invalid bank Account format, please try again");
-                    sc.nextLine();
-                }
-            } //end while
-
-            ss.updateEmployee(userID, firstName, lastName, ssn, monthlySalary, bankAccNumber);
-        }
+    public void updateEmployee(int userId) {
+    	JPanel mainPane = new JPanel();
+    	mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+    	
+    	JPanel inputFields = new JPanel();
+    	inputFields.setLayout(new GridLayout(0, 2));
+    	
+    	JPanel buttonPanel = new JPanel();
+    	JButton cancelButton = new JButton("Cancel");
+    	JButton updateButton = new JButton("Update");
+    	
+    	JLabel firstNameLabel = new JLabel("First Name: ");
+    	JLabel lastNameLabel = new JLabel("Last Name: ");
+    	JLabel ssnLabel = new JLabel("Phone Number: ");
+    	JLabel salaryLabel = new JLabel("Address: ");
+    	JLabel bankNumberLabel = new JLabel("Bank Account Number: ");
+    	
+    	JTextField firstNameField = new JTextField(20);
+    	JTextField lastNameField = new JTextField(20);
+    	JTextField ssnField = new JTextField(20);
+    	JTextField salaryField = new JTextField(20);
+    	JTextField bankNumberField = new JTextField(20);
+    	
+    	cancelButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+    			printMenu();
+    		}
+    	});
+    	
+    	class UpdateButtonListener implements ActionListener {
+    		private int userID;
+    		private String firstName;
+    		private String lastName;
+    		private int ssn;
+    		private float salary;
+    		private int bankNumber;
+    		
+    		UpdateButtonListener(int userId) {
+    			this.userID = userId;
+    		}
+    		
+    		public void actionPerformed(ActionEvent event) {
+    			firstName = firstNameField.getText();
+    			lastName = lastNameField.getText();
+    			
+    			try {
+    				ssn = Integer.parseInt(ssnField.getText());
+    				
+    				if (ssn < 100000000 || ssn > 999999999) {
+    					JOptionPane.showMessageDialog(si, "Thst is not a 9-digit number!");
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter the number without dashes");	// TODO: Logging
+    				return;
+    			}
+    			
+    			try {
+    				salary = Float.parseFloat(ssnField.getText());
+    				
+    				if (salary <= 0f) {
+    					JOptionPane.showMessageDialog(si, "Salary must be greater than 0!");	// TODO: Logging
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter monthly salary as a non-zero decimal number.");	// TODO: Logging
+    				return;
+    			}
+    			
+    			try {
+    				bankNumber = Integer.parseInt(ssnField.getText());
+    				
+    				if (bankNumber < 0) {
+    					JOptionPane.showMessageDialog(si, "Bank account number must be greater than 0!");	// TODO: Logging
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");	// TODO: Logging
+    				return;
+    			}
+    			
+    			ss.updateEmployee(userID, firstName, lastName, ssn, salary, bankNumber);
+    			JOptionPane.showMessageDialog(si, "User information updated.");
+    			printMenu();
+    		}
+    	}
+    	
+    	UpdateButtonListener updateListen = new UpdateButtonListener(userId);
+    	updateButton.addActionListener(updateListen);
+    	
+    	buttonPanel.add(cancelButton);
+    	buttonPanel.add(updateButton);
+    	
+    	inputFields.add(firstNameLabel);
+    	inputFields.add(firstNameField);
+    	inputFields.add(lastNameLabel);
+    	inputFields.add(lastNameField);
+    	inputFields.add(ssnLabel);
+    	inputFields.add(ssnField);
+    	inputFields.add(salaryLabel);
+    	inputFields.add(salaryField);
+    	inputFields.add(bankNumberLabel);
+    	inputFields.add(bankNumberField);
+    	
+    	mainPane.add(inputFields);
+    	mainPane.add(buttonPanel);
+    	
+    	si.getContentPane().removeAll();
+    	
+    	si.add(mainPane);
+    	si.pack();
+    	si.repaint();
     }
     
     /**
      * This method is used to complete a package shipping/delivery transaction.
      *
-     * @throws shippingstore.BadInputException
      */
-    public void deliverPackage() throws BadInputException {
-
-        Date currentDate = new Date(System.currentTimeMillis());
-
-        sc.nextLine();
-        System.out.println("\nEnter customer ID (int): ");
-        int customerId = sc.nextInt();
-        //Check that the customer exists in database
-        boolean customerExists = ss.userExists(customerId);
-
-        if (!customerExists) {
-            System.out.println("\nThe customer ID you have entered does not exist in the database.\n"
-                    + "Please add the customer to the database first and then try again.");
-            return;
-        }
-
-        System.out.println("\nEnter employee ID (int): ");
-
-        int employeeId = 0;
-        if (sc.hasNextInt()) {
-            employeeId = sc.nextInt();
-        }
-        //Check that the employee exists in database
-        boolean employeeExists = ss.userExists(employeeId);
-
-        if (!employeeExists) {
-            System.out.println("\nThe employee ID you have entered does not exist in the database.\n"
-                    + "Please add the employee to the database first and then try again.");
-            return;
-        }
-
-        sc.nextLine();
-        System.out.println("\nEnter tracking number (string): ");
-        String ptn = sc.nextLine();
-
-        //Check that the package exists in database
-        if (!ss.packageExists(ptn)) {
-            System.out.println("\nThe package with the tracking number you are trying to deliver "
-                    + "does not exist in the database. Aborting transaction.");
-            return;
-        }
-
-        System.out.println("\nEnter price (float): ");
-        float price = sc.nextFloat();
-        if (price < 0.0f) {
-            throw new BadInputException("Price cannot be negative.");
-        }
-
-        ss.addShppingTransaction(customerId, employeeId, ptn, currentDate, currentDate, price);
-        ss.deletePackage(ptn);
-
-        System.out.println("\nTransaction Completed!");
+    public void deliverPackage() {
+    	
+    	Date currentDate = new Date(System.currentTimeMillis());
+    	
+    	JPanel mainPane = new JPanel();
+    	mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+    	
+    	JPanel inputFields = new JPanel();
+    	inputFields.setLayout(new GridLayout(0, 2));
+    	
+    	JPanel buttonPanel = new JPanel();
+    	JButton cancelButton = new JButton("Cancel");
+    	JButton deliverButton = new JButton("Deliver");
+    	
+    	JLabel crustyLabel = new JLabel("Customer ID: ");
+    	JLabel squidwardLabel = new JLabel("Employee ID: ");
+    	JLabel trackingLabel = new JLabel("Tracking Number: ");
+    	JLabel priceLabel = new JLabel("Shipping Cost: ");
+    	
+    	JTextField crustyField = new JTextField(20);
+    	JTextField squidwardField = new JTextField(20);
+    	JTextField trackingField = new JTextField(20);
+    	JTextField priceField = new JTextField(20);
+    	
+    	cancelButton.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent event) {
+    			printMenu();
+    		}
+    	});
+    	
+    	class DeliveryListener implements ActionListener {
+    		private int customerID;
+    		private int employeeID;
+    		private String ptn;
+    		private Date currentDate;
+    		private Date deliveryDate;
+    		private float price;
+    		
+    		public DeliveryListener(Date date) {
+    			this.currentDate = date;
+    			this.deliveryDate = date;
+    		}
+    		
+    		public void actionPerformed(ActionEvent event) {
+    			try {
+    				customerID = Integer.parseInt(crustyField.getText());
+    				
+    				if (!ss.isCustomer(customerID)) {
+    					JOptionPane.showMessageDialog(si, "Invalid Customer ID!");		// TODO: Log me baby
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");		// TODO: Log it up
+    				return;
+    			}
+    			
+    			try {
+    				employeeID = Integer.parseInt(squidwardField.getText());
+    				
+    				if (!ss.isEmployee(employeeID)) {
+    					JOptionPane.showMessageDialog(si, "Invalid Employee ID!");		// TODO: Log me baby
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");		// TODO: Log it up
+    				return;
+    			}
+    			
+    			ptn = trackingField.getText();
+    			
+    			if (ptn.length() != 5) {
+    				JOptionPane.showMessageDialog(si, "Invalid tracking number!");		// TODO: New phone, log dis
+    				return;
+    			}
+    			else if (!ss.packageExists(ptn)) {
+    				JOptionPane.showMessageDialog(si, "Package not found!");		// TODO: Log me up, Scotty
+    				return;
+    			}
+    			
+    			try {
+    				price = Float.parseFloat(crustyField.getText());
+    				
+    				if (price < 0f) {
+    					JOptionPane.showMessageDialog(si, "Price cannot be negaive!");		// TODO: Log me baby
+    					return;
+    				}
+    			} catch (NumberFormatException ex) {
+    				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");		// TODO: Log it up
+    				return;
+    			}
+    			
+    			ss.addShippingTransaction(customerID, employeeID, ptn, currentDate, deliveryDate, price);
+    			JOptionPane.showMessageDialog(si, "Package delivered!");
+    			printMenu();
+    		}
+    	}
+    	
+    	DeliveryListener deliverMe = new DeliveryListener(currentDate);
+    	deliverButton.addActionListener(deliverMe);
+    	
+    	buttonPanel.add(cancelButton);
+    	buttonPanel.add(deliverButton);
+    	
+    	inputFields.add(crustyLabel);
+    	inputFields.add(crustyField);
+    	inputFields.add(squidwardLabel);
+    	inputFields.add(squidwardField);
+    	inputFields.add(trackingLabel);
+    	inputFields.add(trackingField);
+    	inputFields.add(priceLabel);
+    	inputFields.add(priceField);
+    	
+    	mainPane.add(inputFields);
+    	mainPane.add(buttonPanel);
+    	
+    	si.getContentPane().removeAll();
+    	
+    	si.add(mainPane);
+    	si.pack();
+    	si.repaint();
     }
     
     

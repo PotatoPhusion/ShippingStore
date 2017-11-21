@@ -233,10 +233,10 @@ public class ShippingStore {
      */
     private String getFormattedUserList(List<User> users) {
         String text ="---------------------------------------------------"
-                + "------------------------------------------------"
+                + "-------------------------------------------------"
                 + "---------------\n";
         text += String.format("| %10s | %9s | %12s | %12s | %35s                    | %n",
-                "USER TYPE", "USER ID", "FIST NAME", "LAST NAME", "OTHER DETAILS");
+                "USER TYPE", "USER ID", "FIRST NAME", "LAST NAME", "OTHER DETAILS");
         text += "---------------------------------------------------"
                 + "-----------------------------------------------"
                 + "---------------\n";
@@ -245,7 +245,7 @@ public class ShippingStore {
         }
         text += "---------------------------------------------------"
                 + "-----------------------------------------------"
-                + "---------------\n";
+                + "----------------\n";
         
         return text;
     }
@@ -364,7 +364,7 @@ public class ShippingStore {
      * @param deliveryDate
      * @param price
      */
-    public void addShppingTransaction(int customerId, int employeeId, String ptn,
+    public void addShippingTransaction(int customerId, int employeeId, String ptn,
                        Date shippingDate, Date deliveryDate, float price) {
         Transaction trans = new Transaction(customerId, employeeId, ptn, shippingDate, deliveryDate, price);
         transactions.add(trans);
