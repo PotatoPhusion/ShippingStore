@@ -205,6 +205,11 @@ public class MainApp {
 	}
     
 
+    /**
+     * This method allows the user to enter a new package to the list
+     * database.
+     * @throws shippingstore.BadInputException bad input
+     */
     public void addNewPackage() throws BadInputException, NumberFormatException {
     	
     	String[] typeStrings = { "Envelope", "Box", "Crate", "Drum" };
@@ -670,204 +675,6 @@ public class MainApp {
 		
 		si.repaint();
     }
-
-   
-   /**
-     * This method allows the user to enter a new package to the list
-     * database.
-     * @throws shippingstore.BadInputException bad input
-     */
-    /*
-    public void addNewPackage() throws BadInputException {
-    	
-    	int packageType = 1;	// TODO: don't forget to delet this
-    	
-    	JPanel addPackagePanel = new JPanel(new CardLayout());
-    	
-    	JPanel cardEnvelope = new JPanel();
-    	JPanel cardBox = new JPanel();
-    	JPanel cardCrate = new JPanel();
-    	JPanel cardDrum = new JPanel();
-    	
-    	class TypeLayoutListener implements ItemListener {
-    		public void itemStateChanged(ItemEvent event) {
-    			CardLayout cl = (CardLayout)(addPackagePanel.getLayout());
-    			cl.show(addPackagePanel, (String)event.getItem());
-    		}
-    	}
-    	
-    	JPanel comboBoxPane = new JPanel();
-    	
-    	String[] typeStrings = { "Envelope", "Box", "Crate", "Drum" };
-        
-        JComboBox<String> typeList = new JComboBox<String>(typeStrings);
-        typeList.setSelectedIndex(0);
-        typeList.setEditable(false);
-        TypeLayoutListener cardListener = new TypeLayoutListener();
-        typeList.addItemListener(cardListener);
-        
-        
-        JLabel trackingNumLabel = new JLabel("Tracking Number: ");
-        JTextField trackNum = new JTextField(20);
-        
-        trackingNumLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-
-        System.out.println("\nEnter tracking number (string): ");
-        String ptn = sc.nextLine();
-        if (ptn.length() > 5) {
-            throw new BadInputException("Tracking number should not be more that 5 characters long.");
-        }
-
-        if (ss.packageExists(ptn)) {
-            System.out.println("\nPackage with the same tracking number exists, try again");
-            return;
-        }
-        
-        String[] specificationStrings = { "Fragile", "Books", "Catalogs", "Do-not-bend", "N/A" };
-        
-        JComboBox<String> specificationList = new JComboBox<String>(specificationStrings);
-        typeList.setSelectedIndex(0);
-        typeList.setEditable(false);
-        
-        System.out.println("\nEnter Specification: Fragile, Books, Catalogs, Do-not-bend, or N/A");
-        String specification = sc.nextLine();
-        boolean correct = false;
-
-        correct = specification.equalsIgnoreCase("Fragile") || specification.equalsIgnoreCase("Books") || specification.equalsIgnoreCase("Catalogs");
-        correct = correct || specification.equalsIgnoreCase("Do-not-bend") || specification.equalsIgnoreCase("N/A");
-
-        if (!(correct)) {
-            throw new BadInputException("Specifications can only be one of the following: Fragile, Books, Catalogs, Do-not-bend, or N/A");
-        }
-
-        System.out.println("\nEnter mailing class can be First-Class, Priority, Retail, Ground, or Metro.");
-        String mailingClass = sc.nextLine();
-
-        correct = mailingClass.equalsIgnoreCase("First-Class") || mailingClass.equalsIgnoreCase("Priority") || mailingClass.equalsIgnoreCase("Retail");
-        correct = correct || mailingClass.equalsIgnoreCase("Ground") || mailingClass.equalsIgnoreCase("Metro");
-        if (!(correct)) {
-            throw new BadInputException("Specifications can only be one of the following: Fragile, Books, Catalogs, Do-not-bend, or N/A");
-        }
-
-        if (packageType == 1) {
-            System.out.println("\nEnter height (inch), (int): ");
-            int height = 0;
-            if (sc.hasNextInt()) {
-                height = sc.nextInt();
-                sc.nextLine();
-                if (height < 0) {
-                    throw new BadInputException("Height of Envelope cannot be negative.");
-                }
-            } else {
-                sc.nextLine();
-                throw new BadInputException("Height of Envelope is integer.");
-            }
-
-            int width = 0;
-            System.out.println("\nEnter width (inch), (int): ");
-            if (sc.hasNextInt()) {
-                width = sc.nextInt();
-                sc.nextLine();
-                if (width < 0) {
-                    throw new BadInputException("Width of Envelope cannot be negative.");
-                }
-            } else {
-                sc.nextLine();
-                throw new BadInputException("Width of Envelope is integer.");
-            }
-            
-            ss.addEnvelope(ptn, specification, mailingClass, height, width);
-
-        } else if (packageType == 2) {
-            System.out.println("\nEnter largest dimension (inch), (int): ");
-
-            int dimension = 0;
-            if (sc.hasNextInt()) {
-                dimension = sc.nextInt();
-                sc.nextLine();
-                if (dimension < 0) {
-                    throw new BadInputException("Largest dimension of Box cannot be negative.");
-                }
-            } else {
-                sc.nextLine();
-                throw new BadInputException("Dimension should be integer.");
-            }
-
-            System.out.println("\nEnter volume (inch^3), (int): ");
-
-            int volume = 0;
-            if (sc.hasNextInt()) {
-                volume = sc.nextInt();
-                sc.nextLine();
-                if (volume < 0) {
-                    throw new BadInputException("Volume of Box cannot be negative.");
-                }
-            } else {
-                sc.nextLine();
-                throw new BadInputException("Volume should be integer.");
-            }
-
-            ss.addBox(ptn, specification, mailingClass, dimension, volume);
-
-        } else if (packageType == 3) {
-            System.out.println("\nEnter maximum load weight (lb), (float): ");
-
-            float weight = 0.0f;
-            if (sc.hasNextFloat()) {
-                weight = sc.nextFloat();
-                sc.nextLine();
-                if (weight < 0.0f) {
-                    throw new BadInputException("Maximum load weight of Crate cannot be negative.");
-                }
-            } else {
-                sc.nextLine();
-                throw new BadInputException("Max load should be float");
-            }
-
-            System.out.println("\nEnter content (string): ");
-            String content = sc.nextLine();
-
-            ss.addCrate(ptn, specification, mailingClass, weight, content);
-           
-        } else if (packageType == 4) {
-
-            System.out.println("\nEnter material (Plastic / Fiber): ");
-            String material = sc.nextLine();
-            if (!(material.equalsIgnoreCase("Plastic") || material.equalsIgnoreCase("Fiber"))) {
-                throw new BadInputException("Material of Drum can only be plastic or fiber.");
-            }
-
-            float diameter = 0.0f;
-            System.out.println("\nEnter diameter (float): ");
-            if (sc.hasNextFloat()) {
-                diameter = sc.nextFloat();
-                sc.nextLine();
-                if (diameter < 0.0f) {
-                    throw new BadInputException("Diameter of Drum cannot be negative.");
-                }
-            } else {
-                sc.nextLine();
-                throw new BadInputException("Diameter should be float");
-            }
-
-            ss.addDrum(ptn, specification, mailingClass, material, diameter);
-            
-        } else {
-            System.out.println("Unknown package type entered. Please try again.");
-        }
-        
-        addPackagePanel.add(cardEnvelope, "Envelope");
-        addPackagePanel.add(cardBox, "Box");
-        addPackagePanel.add(cardCrate, "Crate");
-        addPackagePanel.add(cardDrum, "Drum");
-        
-        si.getContentPane().removeAll();
-		si.add(addPackagePanel);
-		si.pack();
-		
-		si.repaint();
-    }
-    */
     
     /**
      * This method displays all the package currently in the inventory, in a
@@ -1736,10 +1543,9 @@ public class MainApp {
     		e.printStackTrace();
     	}
     	
-    	//si.setSize(400, 400);
     	
     	si.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//si.pack();
+		si.pack();
 		si.setVisible(true);
     }
     
