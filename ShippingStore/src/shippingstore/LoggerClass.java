@@ -3,6 +3,15 @@ package shippingstore;
 import java.io.IOException;
 import java.util.logging.*;
 
+/**
+ * 
+ * @author Rafael Reza
+ *
+ * Was supposed to write all the logging statements in the MainApp
+ * to a designated output file but has not been playing nice :/
+ * 
+ */
+
 public class LoggerClass {
 	private final static  Logger logger = Logger.getLogger(LoggerClass.class.getName());
 	private static FileHandler fh = null;
@@ -22,11 +31,14 @@ public class LoggerClass {
 	public static void main (String[] args) {
 		
 	LoggerClass.init();
+	
 	logger.setLevel(Level.FINER);
-	logger.log(Level.INFO, "message balls fireass");
-	logger.log(Level.SEVERE, "message big");
-	ShippingStore.test();
-	
-	
+	logger.log(Level.INFO, "Program startup.");
+	logger.log(Level.INFO, "Program end.");
+	//MainApp.addNewPackage();
+	//MainApp.EnvelopeListener();
+	//MainApp.CrateListener();
+	//MainApp.BoxListener();
+	//MainApp.DrumListener();
 	}
 }

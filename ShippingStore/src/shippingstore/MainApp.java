@@ -12,10 +12,14 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import java.util.*;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.*;
 import javax.swing.*;
 
 import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
+import sun.util.logging.resources.logging;
 
 /**
 * Main access point
@@ -23,6 +27,8 @@ import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 public class MainApp {
     
 	private final Dimension MENU_BUTTON_SIZE = new Dimension(100, 35);
+	
+	private final static  Logger logger = Logger.getLogger(MainApp.class.getName());
 	
     ShippingStore ss;
     private static JFrame si;
@@ -383,10 +389,12 @@ public class MainApp {
         		
         		if (ptn.length() != 5) {
         			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
+        			logger.log(Level.WARNING, "Tracking Number incorrect length.");
         			return;
         		}
         		else if (ss.packageExists(ptn)) {
         			JOptionPane.showMessageDialog(si, "Tracking Number already in database");	// TODO: Logging
+        			logger.log(Level.WARNING, "Tracking Number in database already.");
         			return;
         		}
         		
@@ -395,22 +403,25 @@ public class MainApp {
         			
         			if (height < 0) {
         				JOptionPane.showMessageDialog(si, "Height must be positive!");	// TODO: Logging
+        				logger.log(Level.WARNING, "Height not a positive number.");
         				return;
         			}
         		} catch (NumberFormatException ex) {
         			JOptionPane.showMessageDialog(si, "Height must be an integer!");	// TODO: Logging
+        			logger.log(Level.WARNING, "Height not an int.");
         			return;
         		}
-        		
         		try {
         			width = Integer.parseInt(widthField.getText());
         			
         			if (width < 0) {
         				JOptionPane.showMessageDialog(si, "Width must be positive!");	// TODO: Logging
+        				logger.log(Level.WARNING, "Width gotta be positive.");
         				return;
         			}
         		} catch (NumberFormatException ex) {
         			JOptionPane.showMessageDialog(si, "Width must be an integer!");	// TODO: Logging
+        			logger.log(Level.WARNING, "Width gotta be an int.");
         			return;
         		}
         		
@@ -420,6 +431,7 @@ public class MainApp {
         		ss.addEnvelope(ptn, specification, mailingClass, height, width);
         		
         		JOptionPane.showMessageDialog(si, "Package successfully added!");	// TODO: Logging
+        		logger.log(Level.INFO, "Package has been added!.");
         		printMenu();
         	}
         }
@@ -448,10 +460,12 @@ public class MainApp {
         		
         		if (ptn.length() != 5) {
         			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
+        			logger.log(Level.WARNING, "Tracking Number incorrect length.");
         			return;
         		}
         		else if (ss.packageExists(ptn)) {
         			JOptionPane.showMessageDialog(si, "Tracking Number already in database");	// TODO: Logging
+        			logger.log(Level.WARNING, "Tracking Number in database already.");
         			return;
         		}
         		
@@ -460,10 +474,12 @@ public class MainApp {
         			
         			if (largestDim < 0) {
         				JOptionPane.showMessageDialog(si, "Largest Dimension must be positive!");	// TODO: Logging
+        				logger.log(Level.WARNING, "Dimensions not positive.");
         				return;
         			}
         		} catch (NumberFormatException ex) {
         			JOptionPane.showMessageDialog(si, "Largest Dimension must be an integer!");	// TODO: Logging
+        			logger.log(Level.WARNING, "Dimension not an integer.");
         			return;
         		}
         		
@@ -472,10 +488,12 @@ public class MainApp {
         			
         			if (volume < 0) {
         				JOptionPane.showMessageDialog(si, "Volume must be positive!");	// TODO: Logging
+        				logger.log(Level.WARNING, "Volume is not positive, must be positive.");
         				return;
         			}
         		} catch (NumberFormatException ex) {
         			JOptionPane.showMessageDialog(si, "Volume must be an integer!");	// TODO: Logging
+        			logger.log(Level.WARNING, "Volume gotta be an integer brah.");
         			return;
         		}
         		
@@ -485,6 +503,7 @@ public class MainApp {
         		ss.addBox(ptn, specification, mailingClass, largestDim, volume);
         		
         		JOptionPane.showMessageDialog(si, "Package successfully added!");	// TODO: Logging
+        		logger.log(Level.INFO, "Package has been added!");
         		printMenu();
         	}
         }
@@ -513,10 +532,12 @@ public class MainApp {
         		
         		if (ptn.length() != 5) {
         			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
+        			logger.log(Level.WARNING, "Number is not 5 characters long");
         			return;
         		}
         		else if (ss.packageExists(ptn)) {
         			JOptionPane.showMessageDialog(si, "Tracking Number already in database");	// TODO: Logging
+        			logger.log(Level.WARNING,  "Tracking Number already in database.");
         			return;
         		}
         		
@@ -525,10 +546,12 @@ public class MainApp {
         			
         			if (loadWeight < 0) {
         				JOptionPane.showMessageDialog(si, "Load Weight must be positive!");	// TODO: Logging
+        				logger.log(Level.WARNING, "Load weight must be positive.");
         				return;
         			}
         		} catch (NumberFormatException ex) {
         			JOptionPane.showMessageDialog(si, "Load Weight must be a decimal number!");	// TODO: Logging
+        			logger.log(Level.WARNING, "Weight must be a decimal number.");
         			return;
         		}
         		
@@ -539,6 +562,7 @@ public class MainApp {
         		ss.addCrate(ptn, specification, mailingClass, loadWeight, content);
         		
         		JOptionPane.showMessageDialog(si, "Package successfully added!");	// TODO: Logging
+        		logger.log(Level.INFO, "Package has been added!");
         		printMenu();
         	}
         }
@@ -567,10 +591,12 @@ public class MainApp {
         		
         		if (ptn.length() != 5) {
         			JOptionPane.showMessageDialog(si, "Tracking Number must be 5 characters long");	// TODO: Logging
+        			logger.log(Level.WARNING, "Tracking number gotta be 5 characters long.");
         			return;
         		}
         		else if (ss.packageExists(ptn)) {
         			JOptionPane.showMessageDialog(si, "Tracking Number already in database");	// TODO: Logging
+        			logger.log(Level.WARNING, "Tracking number already in database.");
         			return;
         		}
         		
@@ -579,10 +605,12 @@ public class MainApp {
         			
         			if (diameter < 0) {
         				JOptionPane.showMessageDialog(si, "Diameter must be positive!");	// TODO: Logging
+        				logger.log(Level.WARNING, "Diameter must be a positive.");
         				return;
         			}
         		} catch (NumberFormatException ex) {
         			JOptionPane.showMessageDialog(si, "Diameter must be a decimal number");	// TODO: Logging
+        			logger.log(Level.WARNING, "Diameter ust be a decimal num.");
         			return;
         		}
         		
@@ -593,6 +621,7 @@ public class MainApp {
         		ss.addDrum(ptn, specification, mailingClass, material, diameter);
         		
         		JOptionPane.showMessageDialog(si, "Package successfully added!");	// TODO: Logging
+        		logger.log(Level.INFO, "Package added!");
         		printMenu();
         	}
         }
@@ -1120,6 +1149,7 @@ public class MainApp {
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter the number without dashes");	// TODO: Logging
+    				logger.log(Level.SEVERE, "SSN must not have hyphens.");
     				return;
     			}
     			
@@ -1128,10 +1158,12 @@ public class MainApp {
     				
     				if (salary <= 0f) {
     					JOptionPane.showMessageDialog(si, "Salary must be greater than 0!");	// TODO: Logging
+    					logger.log(Level.SEVERE, "Salary must be greater than 0");
     					return;
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter monthly salary as a non-zero decimal number.");	// TODO: Logging
+    				logger.log(Level.SEVERE, "Monthly salary must be non zero decimal number.");
     				return;
     			}
     			
@@ -1140,15 +1172,18 @@ public class MainApp {
     				
     				if (bankNumber < 0) {
     					JOptionPane.showMessageDialog(si, "Bank account number must be greater than 0!");	// TODO: Logging
+    					logger.log(Level.SEVERE, "Bank account must be greather than zero.");
     					return;
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");	// TODO: Logging
+    				logger.log(Level.SEVERE, "Only numerical characters accepted.");
     				return;
     			}
     			
     			ss.addEmployee(firstName, lastName, ssn, salary, bankNumber);
     			JOptionPane.showMessageDialog(si, "New user successfully added!");	// TODO: Log this
+    			logger.log(Level.INFO, "New user added!");
     			printMenu();
     		}
     	}
@@ -1221,6 +1256,7 @@ public class MainApp {
     			
     			ss.addCustomer(firstName, lastName, phoneNumber, address);
     			JOptionPane.showMessageDialog(si, "New user successfully added!");	//TODO: Log this
+    			logger.log(Level.INFO, "New user added!");
     			printMenu();
     		}
     	}
@@ -1276,6 +1312,7 @@ public class MainApp {
 		    		
 		    		if (!ss.userExists(userId)) {
 		    			JOptionPane.showMessageDialog(si, "No user found with ID: " + userId);	// TODO: Logging
+		    			logger.log(Level.SEVERE, "No user found");
 		    			return;
 		    		}
 		    		
@@ -1287,6 +1324,7 @@ public class MainApp {
 		    		}
 		    	} catch (NumberFormatException ex) {
 		    		JOptionPane.showMessageDialog(si, "Please enter a proper user ID");	// TODO: Logging
+		    		logger.log(Level.WARNING, "A proper user ID is needed.");
 		    		return;
 		    	}
 	    	}
@@ -1353,6 +1391,7 @@ public class MainApp {
     			
     			ss.updateCustomer(userID, firstName, lastName, phoneNumber, address);
     			JOptionPane.showMessageDialog(si, "User information updated.");	// TODO: Log this
+    			logger.log(Level.INFO, "User info updated.");
     			printMenu();
     		}
     	}
@@ -1436,6 +1475,7 @@ public class MainApp {
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter the number without dashes");	// TODO: Logging
+    				logger.log(Level.SEVERE, "SSN must not have dashes.");
     				return;
     			}
     			
@@ -1444,10 +1484,12 @@ public class MainApp {
     				
     				if (salary <= 0f) {
     					JOptionPane.showMessageDialog(si, "Salary must be greater than 0!");	// TODO: Logging
+    					logger.log(Level.SEVERE, "Salary needs to be greater than 0.");
     					return;
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter monthly salary as a non-zero decimal number.");	// TODO: Logging
+    				logger.log(Level.SEVERE, "Monthly salary must be non zero.");
     				return;
     			}
     			
@@ -1456,15 +1498,18 @@ public class MainApp {
     				
     				if (bankNumber < 0) {
     					JOptionPane.showMessageDialog(si, "Bank account number must be greater than 0!");	// TODO: Logging
+    					logger.log(Level.SEVERE, "Bank account number must be greater than 0");
     					return;
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");	// TODO: Logging
+    				logger.log(Level.SEVERE, "Only numerical characters accepted.");
     				return;
     			}
     			
     			ss.updateEmployee(userID, firstName, lastName, ssn, salary, bankNumber);
     			JOptionPane.showMessageDialog(si, "User information updated.");
+    			logger.log(Level.INFO, "User info updated.");
     			printMenu();
     		}
     	}
@@ -1549,10 +1594,12 @@ public class MainApp {
     				
     				if (!ss.isCustomer(customerID)) {
     					JOptionPane.showMessageDialog(si, "Invalid Customer ID!");		// TODO: Log me baby
+    					logger.log(Level.SEVERE, "Customer ID invalid.");
     					return;
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");		// TODO: Log it up
+    				logger.log(Level.SEVERE, "Numerical characters only.");
     				return;
     			}
     			
@@ -1561,10 +1608,12 @@ public class MainApp {
     				
     				if (!ss.isEmployee(employeeID)) {
     					JOptionPane.showMessageDialog(si, "Invalid Employee ID!");		// TODO: Log me baby
+    					logger.log(Level.SEVERE, "Employee ID invalid.");
     					return;
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");		// TODO: Log it up
+    				logger.log(Level.SEVERE, "Numerical characters only.");
     				return;
     			}
     			
@@ -1572,10 +1621,12 @@ public class MainApp {
     			
     			if (ptn.length() != 5) {
     				JOptionPane.showMessageDialog(si, "Invalid tracking number!");		// TODO: New phone, log dis
+    				logger.log(Level.SEVERE, "Tracking num invalid.");
     				return;
     			}
     			else if (!ss.packageExists(ptn)) {
     				JOptionPane.showMessageDialog(si, "Package not found!");		// TODO: Log me up, Scotty
+    				logger.log(Level.SEVERE, "Package not able to be located.");
     				return;
     			}
     			
@@ -1584,15 +1635,18 @@ public class MainApp {
     				
     				if (price < 0f) {
     					JOptionPane.showMessageDialog(si, "Price cannot be negaive!");		// TODO: Log me baby
+    					logger.log(Level.SEVERE, "Price cannot be a negative number.");
     					return;
     				}
     			} catch (NumberFormatException ex) {
     				JOptionPane.showMessageDialog(si, "Please enter numeric characters only.");		// TODO: Log it up
+    				logger.log(Level.SEVERE, "Numerical characters only.");
     				return;
     			}
     			
     			ss.addShippingTransaction(customerID, employeeID, ptn, currentDate, deliveryDate, price);
     			JOptionPane.showMessageDialog(si, "Package delivered!");
+    			logger.log(Level.INFO, "Package has been delivered.");
     			printMenu();
     		}
     	}
